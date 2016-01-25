@@ -1,9 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
 using namespace std;
-
 int main(int argc, char* argv[]){
   if(argc < 3){
     cerr << "Please provide an input and output file." << endl;
@@ -22,11 +20,11 @@ int main(int argc, char* argv[]){
   floorsizes = new int[floors];
   posessions = new int*[floors];
 
-  for (int i = 0; i < floors; i++) {
+  	for (int i = 0; i < floors; i++) {
 	  floorsizes[i] = 0;
 	  trojans[i] = NULL;
 	  posessions[i] = NULL;
-  }
+  	}
 	while(getline(input, curr)) {
 		stringstream ss;
 		ss << curr;
@@ -51,12 +49,12 @@ int main(int argc, char* argv[]){
 			int i;
 			ss >> i;
 			if (ss.fail()) output << "Error - incorrect command" << endl;
-			else if( floorsizes[i] == 0) output << "No students living on floor "<< i <<endl;
 			else if (i > floors - 1) output << "Error - floor "<<i<<" does not exist"<<endl;
-			else{
-				for(int j = 0; j < floorsizes[i]; j++)	delete  trojans[i][j];
-				delete [] posessions[i];
-				delete [] trojans[i];
+			else if ( floorsizes[i] == 0) output << "No students living on floor "<< i <<endl;
+			else {
+				for(int j = 0; j < floorsizes[i]; j++)	delete[] trojans[i][j];
+				delete[] posessions[i];
+				delete[] trojans[i];
 			 	posessions[i] = NULL;
 				trojans[i] = NULL;
 				floorsizes[i] = 0;
@@ -79,7 +77,6 @@ int main(int argc, char* argv[]){
 			}
 		}
 		else if (curr == "OUTPUT") {
-
 			int i, j;
 			ss >> i;
 			ss >> j;
@@ -95,6 +92,7 @@ int main(int argc, char* argv[]){
 			if(!first) output << "Error - incorrect command" << endl;
 			first = false;
 		}
+		curr = "";
 	}
   	for(int i = 0; i < floors; i++){
   		for(int j = 0; j < floorsizes[i]; j++)	delete [] trojans[i][j];

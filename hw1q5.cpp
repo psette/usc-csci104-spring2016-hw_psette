@@ -5,8 +5,7 @@ int main(int argc, char *argv[]){
 		std::cerr<<"Check Inputs"<<std::endl;
 		return -1;
 	}
-	std::string filename = argv[1];
-	std::ifstream file(filename);
+	std::ifstream file(argv[1]);
 	if(file.fail())	std::cerr<< "Check FileName" <<std::endl;
 	int num = 0;
 	file >> num;

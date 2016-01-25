@@ -1,5 +1,5 @@
 # CS 104 Student Repository
 
-- **Name**: Tommy Trojan
-- **USC ID**: 1234567890
-- **Email**: ttrojan@usc.edu
+- **Name**: Pietro Sette
+- **USC ID**: 8626509080
+- **Email**: psette@usc.edu

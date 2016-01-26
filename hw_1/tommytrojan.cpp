@@ -73,7 +73,6 @@ int main(int argc, char* argv[]){
 				posessions[i][j] = k;
 				trojans[i][j] = new string[k];
 				for(int x = 0; x < k; x++)	ss >> trojans[i][j][x];
-				if(ss >> check_empty) output << "More objects than specified!" <<endl;
 			}
 		}
 		else if (curr == "OUTPUT") {

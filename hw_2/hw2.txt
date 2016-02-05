@@ -1,0 +1,44 @@
+
+Problem 1
+Part (a): The files are tracked and unmodified.
+
+Part (b): Readme is modified and not staged. Funproblems is untracked
+
+Part (c): Readme was modified and is now staged. Funproblem was added now staged.
+
+Part (d): Readme and Funproblem are both modified because you used echo, which modifies.
+
+Part (e): Readme staged, Funproblem unmodified and empty because of checkout reverts back to the status of the file 2 commits ago.
+
+Part (f): Modified, echo writes to the file, so Readme is edited after being staged, therefore modified.
+
+
+Problem 3
+a)  n * log(n)  	The inner loop executes log(n) operations. Also, this will execute with each iteration of the outer loop (which executes n times) so the overall notation is O (n * log(n)).
+
+b)  n^2 * log(n) 	The inner loop executes log(n) operations. Also, this will execute with each iteration of the middle loop (which executes n times). This leads to a O (n * log(n)) runtime for the inner two loops. Lastly, the outer loop will run another n times so the overall notation is O (n * n * log(n)) or O ( n^2 * log(n)).
+
+c)  n^2 	The outer loop executes n times. The inner loop executes whenever the array needs to be resized, which is every 10 iterations. This means that it will execute n/10 times. This being said, the total runtime is O(n*n/10) which simplifies to O(n^2)
+
+d)  n 	The outer loop executes n times. The inner loop executes whenever the array needs to be resized, which is every 2 ^ n time. Soon enough this number will be massive, and the array will rarely need to be resized, so the runtime is simply O(n)
+
+
+Problem 4
+a)  An array of strings of size 44. These strings are the names of the presidents and the size (44) is how many presidents there currently are. To add more presidents, you would have to allocate a new array and copy the old contents into the new one.  However, this could also be a vector of strings if you want to insert more one at a time. An array would be O(Log(1)) retrival time.
+
+b)  This would be effectivley done as a map that uses the zip codes (integer) as a key and then has the population estimates as an integer. This can be found in O(Log(n)) time.
+
+c)  An effective data type would be set of strings or integers. The strings would be most effective because the smallest numeric data type that could handle the 10 - digit student ID is a long long int. The set would only include the students that solved the tricky problem. 
+
+d)  A map of float arrays would be effective because the map has O(Log(n)) lookup time and the array is O(1). This means the overall lookup time is O(Log(n)). However, this is dependent on the assignments starting at 0 and incrementing by 1 for each assignement. Also, each time you would need to add more elements than the array has, you would need to double the array size. Also, the datatype float than a double because a double is 8 bytes, whereas a float is 4 bytes.
+
+Problem 5
+The recursive function will return a head for a linked list with nodes 5 -> 4 -> 3 -> 2 -> 1. 
+Function A will have an origianl input of 1. It will set out as the result of FuncA of 2, which will set out as a result of FuncA of 3, which will set out as a result of FuncA of 4, which will set out as a result of FuncA of 5. FuncA of 5 will not go into the if statement and will return 5, so funcA of 4 will have out as 5. It will then run funcB(4,5). FuncB(4,5) will immediately set 5 -> next as 4, so the return linked list will now look like 5 -> 4. Now it will loop back to FuncA(4) where it will set 4 -> next as NULL and return 5. At this point there are two linked lists, the return and the original which at this point is 1 -> 2 -> 3 -> 4.
+
+Now we move to FuncA(3) where out = 5. FuncB(3,5) is called, which calls FuncB(3,4) which returns and then sets 4 -> next as 3 so the linked lists  will now read 1 -> 2 -> 3  and 5 -> 4 -> 3.  Then it returns to FuncA(3) and returns 5.
+
+Now we move to FuncA(2) where out is still 5. FuncB(2,5) is called, which callS FuncB(2,4), which callS FuncB(2,3) which sets 3 -> next as 2. It sets 2 -> next = NULL and so the two linked lists now look like 1 -> 2 and 5 -> 4 -> 3 -> 2. Then it returns to FuncA(2) and returns 5.
+
+Now we move to FuncA(1) where out is still 5. FuncB(1,5) is called, which callS FuncB(1,4), which calls FuncB(1,3), which calls FuncB(1,2) which sets 2 -> next as 1 and returns. This returns to FuncA(1) where it sets 1 -> next as NULL so the Linked List is now fully reversed as 5 -> 4 -> 3 -> 2 -> 1. FuncA(1) lastly returns a pointer to 5, the head of the new list.
+

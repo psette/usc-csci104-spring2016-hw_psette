@@ -63,7 +63,6 @@ int main(int argc, char* argv[]){
 		else if (curr == "OBTAIN") {
 			int i, j, k;
 			ss >> i >> j >> k;
-			string check_empty;
 			if (ss.fail()) output << "Error - incorrect command" << endl;
 			else if( floorsizes[i] == 0) output << "No students living on floor "<< i <<endl;
 			else if (i > floors - 1) output << "Error - floor "<<i<<" does not exist"<<endl;

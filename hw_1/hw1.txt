@@ -5,7 +5,6 @@ Which of the following are acceptable behaviors in solving homeworks/projects?
 Looking up information relevant to the course online.
 Asking the course staff for help.
 Sitting next to my classmate and coding together as a team or with significant conversation about approach.
-Sharing my code with a classmate, if he/she just wants to read over it and learn from it
 
 
 

@@ -22,5 +22,8 @@ make sape makes problem 5 and creates executable sape in the bin directory
 make llisttest makes problem 3 and creates executable llisttest in the bin directory
 make stackint makes problem 4 and creates executable stackint in the bin directory
 
-- **test.cpp** 
+- **listtest.cpp** 
 A handful of google test cases for each individual functions (copy constructor, operator=, operator+, and []).
+
+- **stacktest.cpp** 
+A handful of google test cases for each individual functions (empty, push, top, and pop).

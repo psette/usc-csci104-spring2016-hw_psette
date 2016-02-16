@@ -1,0 +1,30 @@
+2a)
+O(n^2)
+For worst case, inputs would be even because the if statement that is used when n = max takes more time(n^2) than the else (log(n)).
+
+b)
+O(n)
+(1*O(n) + n * 0(log(n) ) )/ n = (n^2 + n * log(n)) / n = n + log (n) = O(n)
+
+c)
+(1*O(n) + n * 0(n *log(n) ) )/ n = (n^2 + n * n *log(n)) / n = n + n * log(n) = O(n * log(n))
+
+d)
+The worst case would be with n = max > 0. The worst sequence of calls would be like : 
+
+void someclass::somefunc() {
+  if (this->n == this->max) {
+    bar();
+    this->max *= 2;
+  } else {
+    foo();
+  }
+  (this->n)++;
+  anotherfunc());
+}
+
+because this would change the inputs back to their original values so the runtime would be O(n^2). Also, the amortized run time would also be O(n^2) because with equal inputs, every call would be O(n^2)
+
+so
+(n^2 + n^2 + .... + n^2) / n = n * n^2/n = n^2 = O(n^2)
+

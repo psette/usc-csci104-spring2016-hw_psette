@@ -1,4 +1,4 @@
-#include "stackint.h"
+#include "../lib/stackint.h"
   StackInt::StackInt(){}
   StackInt::~StackInt(){
     list.clear();

@@ -1,4 +1,4 @@
-#include "llistint.h"
+#include "../lib/llistint.h"
 #include <cstdlib>
 #include <stdexcept>
 LListInt::LListInt(){
@@ -15,8 +15,8 @@ LListInt::LListInt(const LListInt& other){
 
 LListInt& LListInt::operator=(const LListInt& other){
   if(this != &other) {
-  this -> clear();
-  duplicate(other);
+    this -> clear();
+    duplicate(other);
   }
   return *this;
 }

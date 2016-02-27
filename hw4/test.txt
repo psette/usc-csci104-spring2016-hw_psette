@@ -1,4 +1,0 @@
-LET A 3
-MULT B 8
-PRINTALL
-.

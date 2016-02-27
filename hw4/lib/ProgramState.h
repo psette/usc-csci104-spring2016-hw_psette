@@ -32,7 +32,6 @@ public:
 	void Map_Setter(std::string, int);
 	int Map_Getter_Int(std::string);
 	void Stack_Push(int);
-	bool Stack_Empty();
 	void Stack_Pop();
 	int Stack_Top();
 	void Set_Place(int);
@@ -41,7 +40,7 @@ public:
 	std::map<std::string, int>::iterator map_begin();
 	std::map<std::string, int>::iterator map_end();
 private:
-	int m_numLines, size, Place;
+	int size, Place;
 	std::map<std::string, int> variable_map;
 	StackInt stack;
 };

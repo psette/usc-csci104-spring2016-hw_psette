@@ -22,11 +22,9 @@ class SubtStatement: public Statement
 private:
 	std::string m_variableName, value_holder;
 	int m_value;
-
-
 public:
 	SubtStatement(std::string, std::string);
-	virtual void execute(ProgramState *, std::ostream &);
+	void execute(ProgramState *, std::ostream &);
 };
 
 #endif

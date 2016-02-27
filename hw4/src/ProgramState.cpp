@@ -18,9 +18,6 @@ int ProgramState::Map_Getter_Int(std::string input){
 void ProgramState::Stack_Push(int val){
 	stack.push(val);
 }
-bool ProgramState::Stack_Empty(){
-	return stack.empty();
-}
 int ProgramState::Stack_Top(){
 	return stack.top();
 }

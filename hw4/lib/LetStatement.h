@@ -22,6 +22,6 @@ private:
 	int m_value;
 public:
 	LetStatement(std::string, int );
-	virtual void execute(ProgramState *, std::ostream &);
+	void execute(ProgramState *, std::ostream &);
 };
 #endif

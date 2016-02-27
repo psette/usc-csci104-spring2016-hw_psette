@@ -3,12 +3,8 @@
 #include <stdexcept>
 #include <exception>
 GotoStatement::GotoStatement(int value): m_value( value ){}
-// The GotoStatement version of execute() should make two changes to the
-// state of the program:
-//
-//    * set the value of the appropriate variable
-//    * increment the program counter
+//If the line number is valid, jump to that line*
 void GotoStatement::execute(ProgramState * state, std::ostream &outf){
-	if( m_value >= state -> Get_Size() ) throw std::logic_error("Line Jump Invalid");
-	state -> Set_Place(m_value);
+	if(m_value >= state -> Get_Size() || m_value < 0) throw std::logic_error("Line Jump Invalid");
+	else state -> Set_Place(m_value);
 }

@@ -8,8 +8,7 @@ class PrALLStatement: public Statement
 {
 public:
 	PrALLStatement();
-	virtual void execute(ProgramState *, std::ostream &);
+ 	void execute(ProgramState *, std::ostream &);
 };
 
 #endif
-

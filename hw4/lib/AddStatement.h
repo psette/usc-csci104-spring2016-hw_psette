@@ -23,7 +23,7 @@ private:
 	int m_value;
 public:
 	AddStatement(std::string, std::string);
-	virtual void execute(ProgramState* , std::ostream &);
+	void execute(ProgramState* , std::ostream &);
 };
 
 #endif

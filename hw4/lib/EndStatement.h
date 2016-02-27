@@ -4,6 +4,6 @@
 class EndStatement: public Statement{
 public:
 	EndStatement();
-	virtual void execute(ProgramState * , std::ostream &);
+	void execute(ProgramState * , std::ostream &);
 };
 #endif

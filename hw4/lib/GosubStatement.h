@@ -6,7 +6,7 @@ private:
 	int go_val;
 public:
 	GosubStatement(int go_val);
-	virtual void execute(ProgramState * , std::ostream &outf);
+	void execute(ProgramState * , std::ostream &outf);
 };
 
 #endif

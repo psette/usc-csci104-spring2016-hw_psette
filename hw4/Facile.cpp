@@ -64,7 +64,7 @@ Statement * parseLine(string line){
 	} else if( type == "MULT"){
 		ss >> var >> var_second;
 		return new MultStatement(var, var_second);
-	} else if( type == "SUBT"){
+	} else if( type == "SUB"){
 		ss >> var >> var_second;
 		return new SubtStatement(var, var_second);
 	} else if( type == "DIV"){
@@ -74,8 +74,8 @@ Statement * parseLine(string line){
 		ss >> val;
 		return new GotoStatement(val);
 	} else if( type == "IF"){
-		std::string comp_type;
-		ss >> var >> comp_type >> var_second >> val;
+		std::string comp_type, dummy;
+		ss >> var >> comp_type >> var_second >> dummy>> val;
 		return new IfStatement(var, comp_type, var_second, val);
 	} else if( type == "GOSUB"){
 		ss >> val;

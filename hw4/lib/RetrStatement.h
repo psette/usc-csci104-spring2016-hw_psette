@@ -4,6 +4,6 @@
 class RetrStatement: public Statement{
 public:
 	RetrStatement();
-	virtual void execute(ProgramState *, std::ostream &);
+	void execute(ProgramState *, std::ostream &);
 };
 #endif

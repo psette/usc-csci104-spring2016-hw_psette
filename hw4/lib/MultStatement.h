@@ -8,7 +8,7 @@ private:
 	int m_value;
 public:
 	MultStatement(std::string,  std::string);
-	virtual void execute(ProgramState * , std::ostream &);
+	void execute(ProgramState * , std::ostream &);
 };
 
 #endif

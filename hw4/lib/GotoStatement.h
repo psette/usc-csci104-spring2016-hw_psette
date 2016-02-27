@@ -7,7 +7,7 @@ private:
 	int m_value;
 public:
 	GotoStatement(int value);
-	virtual void execute(ProgramState * , std::ostream &);
+	void execute(ProgramState * , std::ostream &);
 };
 
 #endif

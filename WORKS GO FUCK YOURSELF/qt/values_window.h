@@ -28,6 +28,7 @@ class values_window : public QWidget {
 	public:
 		values_window(Facile*);
 		~values_window();
+		void show_win_helper();
 		void getValues();
 		template <class T, class Comparator>
 		void mergesort(std::vector<T>&, int, int, Comparator);

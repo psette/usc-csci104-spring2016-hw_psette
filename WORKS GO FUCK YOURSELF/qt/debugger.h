@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include <QTextStream>
 #include "../lib/Facile.h"
+#include "values_window.h"
 class Debugger : public QWidget {
 	Q_OBJECT
 	public slots:
@@ -34,4 +35,5 @@ class Debugger : public QWidget {
 		QHBoxLayout *h1;
 		QVBoxLayout *v1;
 		Facile * calc;
+		values_window * val_win;
 };

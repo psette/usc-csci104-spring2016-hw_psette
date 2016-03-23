@@ -1,6 +1,8 @@
 #include "debugger.h"
 #include <iostream>
 #include <string>
+#include <stdexcept>
+#include <exception>
 Debugger::~Debugger() {
 	delete h1;
 	delete v1;
@@ -27,6 +29,7 @@ Debugger::Debugger(QFile* file, std::string filename) {
 	inspect_button = new QPushButton("Inspect");
 	quit_button = new QPushButton("Quit");
 	calc = new Facile(filename);
+	val_win = new values_window(calc);
 	h1->addWidget(breakpoint);
 	h1->addWidget(continue_button);
 	h1->addWidget(step_button);
@@ -54,9 +57,13 @@ void Debugger::setBreak(){
 	combo->item(row)->setForeground(Qt::blue);
 }
 void Debugger::continue_func(){
-	int row = calc->Facile::execute('c');
-	if(-42 == row) Debugger::reset();
-	else combo->setCurrentRow(row);
+	try{
+		int row = calc->Facile::execute('c');
+		if(-42 == row) Debugger::reset();
+		else combo->setCurrentRow(row);
+	}catch(std::logic_error){
+		QMessageBox::information(0, "Check Facile Program", "Logic Error");
+	}
 }
 void Debugger::step() {
 	int row = calc->Facile::execute('s');
@@ -69,7 +76,7 @@ void Debugger::next(){
 	else combo->setCurrentRow(row);
 }
 void Debugger::inspect(){
-	calc->Facile::inspect();
+	val_win->show_win();
 }
 void Debugger::reset(){
 	for(int i = combo->count() - 1; i >= 0; i--)	combo->item(i)->setForeground(Qt::black);

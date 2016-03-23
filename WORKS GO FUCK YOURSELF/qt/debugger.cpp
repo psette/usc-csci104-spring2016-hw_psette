@@ -72,7 +72,7 @@ void Debugger::inspect(){
 	calc->Facile::inspect();
 }
 void Debugger::reset(){
-	for(int i = combo->count()-1; i != 0; i--)	combo->item(i)->setForeground(Qt::black);
+	for(int i = combo->count() - 1; i >= 0; i--)	combo->item(i)->setForeground(Qt::black);
 	combo->setCurrentRow(0);
 	calc->Facile::reset();
 }

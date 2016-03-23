@@ -27,13 +27,10 @@ LoadWindow::~LoadWindow(){
 	delete run_button;
 	delete quit_button;
 	delete other_layout;
-	delete overallLayout;
-	delete filename_layout;
 	delete filename_label;
 	delete filename;
-	delete other_layout;
-	delete quit_button;
-	delete run_button;
+	delete filename_layout;
+	delete overallLayout;
 }
 void LoadWindow::quit(){
 	App->quit();

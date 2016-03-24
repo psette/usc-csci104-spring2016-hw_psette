@@ -11,6 +11,7 @@ Debugger::~Debugger() {
 	delete quit_button;
 	delete window;
 	delete calc;
+	delete val_win;
 }
 Debugger::Debugger(QFile* file, std::string filename) {
 	this->app = app;

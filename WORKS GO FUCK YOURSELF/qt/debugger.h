@@ -1,18 +1,6 @@
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QLineEdit>
-#include <QTextEdit>
-#include <QPushButton>
-#include <QListWidget>
-#include <QApplication>
-#include <QFile>
-#include <QString>
-#include <QMessageBox>
-#include <QTextStream>
-#include "../lib/Facile.h"
 #include "values_window.h"
+#include <stdexcept>
+#include <exception>
 class Debugger : public QWidget {
 	Q_OBJECT
 	public slots:
@@ -26,7 +14,9 @@ class Debugger : public QWidget {
 		Debugger(QFile*,std::string);
 		~Debugger();
 		void reset();
+		void logic_error();
 	private:
+		int row;
 		QApplication *app;
 		QPushButton *breakpoint, *continue_button, *step_button;
 		QPushButton *next_button, *inspect_button, *quit_button;

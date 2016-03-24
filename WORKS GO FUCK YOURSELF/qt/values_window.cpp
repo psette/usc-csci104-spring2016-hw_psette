@@ -105,7 +105,6 @@ void values_window::show_win_helper(){
 		std::string temp;
 		ss >> temp;
 		var += "\t" + temp;
-		std::cout<<var<<std::endl;
 		combo->addItem( QString::fromStdString(var) );
 	}
 	window->show();
@@ -122,7 +121,7 @@ void values_window::mergesort(std::vector<T>& input, int low, int high, Comparat
 	if (low >= high - 1)	return;
 	int mid = (low + high) / 2;
 	mergesort(input, low, mid, comp);
-	mergesort(input, mid + 1, high,comp);
+	mergesort(input, mid, high,comp);
 	int l1 = low, h1 = mid, l2 = mid, h2 = high;
 	std::vector<T> temp;
 	while (l1 < h1 && l2 < h2){

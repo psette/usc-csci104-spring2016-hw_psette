@@ -1,8 +1,4 @@
 #include "debugger.h"
-#include <iostream>
-#include <string>
-#include <stdexcept>
-#include <exception>
 Debugger::~Debugger() {
 	delete h1;
 	delete v1;
@@ -37,8 +33,12 @@ Debugger::Debugger(QFile* file, std::string filename) {
 	h1->addWidget(inspect_button);
 	h1->addWidget(quit_button);
 	QTextStream inFile(file);
-	combo->addItem(inFile.readLine());
-    while (!inFile.atEnd()) combo->addItem(inFile.readLine());
+    for(int i = 1; !inFile.atEnd(); i++){
+    	std::stringstream ss;
+		ss << i;
+		combo->addItem(QString::fromStdString(ss.str())+"\t"+ inFile.readLine());
+    }
+    combo->setCurrentRow(0);
 	v1->addWidget(combo);
 	v1->addLayout(h1);
 	window->setLayout(v1);
@@ -52,28 +52,49 @@ Debugger::Debugger(QFile* file, std::string filename) {
 	window->show();
 }
 void Debugger::setBreak(){
-	int row = combo->currentRow();
+	row = combo->currentRow();
 	if(calc->Facile::breakpoint(row))	return;
 	combo->item(row)->setForeground(Qt::blue);
 }
+void Debugger::logic_error(){
+	std::stringstream ss;
+	ss << combo->currentRow();
+	std::string ErrorMsg = "Logic Error on or after line " + ss.str() + "\nProgram restarting";
+	reset();
+	QMessageBox::information(0, "Logic Error", QString::fromStdString(ErrorMsg) );
+}
 void Debugger::continue_func(){
 	try{
-		int row = calc->Facile::execute('c');
 		if(-42 == row) Debugger::reset();
-		else combo->setCurrentRow(row);
+		else {
+			row = calc->Facile::execute('c');
+			combo->setCurrentRow(row);
+		}
 	}catch(std::logic_error){
-		QMessageBox::information(0, "Check Facile Program", "Logic Error");
+		logic_error();
 	}
 }
 void Debugger::step() {
-	int row = calc->Facile::execute('s');
-	if(-42 == row) Debugger::reset();
-	else combo->setCurrentRow(row);
+	try{
+		if(-42 == row) Debugger::reset();
+		else {
+			row = calc->Facile::execute('s');
+			combo->setCurrentRow(row);
+		}
+	}catch(std::logic_error){
+		logic_error();
+	}
 }
 void Debugger::next(){
-	int row = calc->Facile::execute('n');
-	if(-42 == row) Debugger::reset();
-	else combo->setCurrentRow(row);
+	try{
+		if(-42 == row) Debugger::reset();
+		else {
+			row = calc->Facile::execute('n');
+			combo->setCurrentRow(row);
+		}
+	}catch(std::logic_error){
+		logic_error();
+	}
 }
 void Debugger::inspect(){
 	val_win->show_win();

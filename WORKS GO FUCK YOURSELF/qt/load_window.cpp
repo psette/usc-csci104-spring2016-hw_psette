@@ -41,5 +41,6 @@ void LoadWindow::run(){
     if (!file->open(QIODevice::ReadOnly | QIODevice::Text))	QMessageBox::information(0, "File Does Not Exsist", file->errorString());
     else	{
     	debug =  new Debugger(file,tempName.toStdString());
+    	this->close();
     }
 }

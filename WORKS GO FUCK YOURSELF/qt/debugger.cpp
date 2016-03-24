@@ -11,6 +11,7 @@ Debugger::~Debugger() {
 	delete quit_button;
 	delete window;
 	delete calc;
+	delete val_win;
 }
 Debugger::Debugger(QFile* file, std::string filename) {
 	this->app = app;
@@ -51,10 +52,12 @@ Debugger::Debugger(QFile* file, std::string filename) {
 	QObject::connect(quit_button, SIGNAL(clicked()), this, SLOT( quit() ));
 	window->show();
 	row = 1;
+	prev_row = 1;
+	is_done = false;
 }
 void Debugger::setBreak(){
 	row = combo->currentRow();
-	if(calc->Facile::breakpoint(row))	return;
+	if(calc->Facile::breakpoint(row, false))	return;
 	combo->item(row)->setForeground(Qt::blue);
 }
 void Debugger::logic_error(){
@@ -64,41 +67,52 @@ void Debugger::logic_error(){
 	reset();
 	QMessageBox::information(0, "Logic Error", QString::fromStdString(ErrorMsg) );
 }
-void Debugger::continue_func(){
-	try{
-		if(-42 == row) Debugger::reset();
-		else {
-			row = calc->Facile::execute('c');
-			combo->setCurrentRow(row);
+void Debugger::program_done(bool is_done){
+	if(is_done) 
+		std::cout<<"***************PROGRAM RESTARTING***************"<<std::endl;
+	else {
+		for(int i = 0; i < combo->count(); ++i){
+			if(	calc->breakpoint(i, true)	) continue;
+			combo->item(i)->setBackground(Qt::white);
+			combo->item(i)->setForeground(Qt::black);
 		}
+		combo->item(row)->setBackground(Qt::black);
+		combo->item(row)->setForeground(Qt::white);
+		prev_row = row;
+	}
+}
+void Debugger::continue_func(){
+	if(is_done) Debugger::reset();
+	try{
+		row = calc->Facile::execute('c');
+		combo->setCurrentRow(row);
 	}catch(std::logic_error){
 		logic_error();
 	}
-	if(-42 == row) std::cout<<"***************PROGRAM RESTARTED***************"<<std::endl;
+	is_done = -40 == row;
+	program_done( is_done );
 }
 void Debugger::step() {
+	if(is_done) Debugger::reset();
 	try{
-		if(-42 == row) Debugger::reset();
-		else {
-			row = calc->Facile::execute('s');
-			combo->setCurrentRow(row);
-		}
+		row = calc->Facile::execute('s') - 2;
+		combo->setCurrentRow(row);
 	}catch(std::logic_error){
 		logic_error();
 	}
-	if(-42 == row) std::cout<<"***************PROGRAM RESTARTED***************"<<std::endl;
+	is_done = -42 == row;
+	program_done( is_done );
 }
 void Debugger::next(){
+	if(is_done) Debugger::reset();
 	try{
-		if(-42 == row) Debugger::reset();
-		else {
-			row = calc->Facile::execute('n');
-			combo->setCurrentRow(row);
-		}
+		row = calc->Facile::execute('n') - 2;
+		combo->setCurrentRow(row);
 	}catch(std::logic_error){
 		logic_error();
 	}
-	if(-42 == row) std::cout<<"***************PROGRAM RESTARTED***************"<<std::endl;
+	is_done = -42 == row;
+	program_done( is_done );
 }
 void Debugger::inspect(){
 	val_win->show_win();
@@ -107,6 +121,9 @@ void Debugger::reset(){
 	for(int i = combo->count() - 1; i >= 0; i--)	combo->item(i)->setForeground(Qt::black);
 	combo->setCurrentRow(0);
 	calc->Facile::reset();
+	is_done = false;
+	row = 1;
+	prev_row =1;
 }
 void Debugger::quit(){
 	app->quit();

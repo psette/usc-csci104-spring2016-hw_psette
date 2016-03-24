@@ -19,7 +19,8 @@ Facile::~Facile(){
 	program.clear();
 	delete state;
 }
-bool Facile::breakpoint(int breakplace){
+bool Facile::breakpoint(int breakplace, bool just_checking){
+	if(just_checking)	return breakpoints[breakplace];
 	if(true == breakpoints[breakplace])	return true;
 	breakpoints[breakplace] = true;
 	return false;

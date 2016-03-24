@@ -15,8 +15,10 @@ class Debugger : public QWidget {
 		~Debugger();
 		void reset();
 		void logic_error();
+		void program_done(bool);
 	private:
-		int row;
+		bool is_done;
+		int row, prev_row;
 		QApplication *app;
 		QPushButton *breakpoint, *continue_button, *step_button;
 		QPushButton *next_button, *inspect_button, *quit_button;

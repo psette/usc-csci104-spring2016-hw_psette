@@ -24,7 +24,7 @@ class Facile{
 	public:
 		Facile(std::string);
 		~Facile();
-		bool breakpoint(int);
+		bool breakpoint(int, bool);
 		void parseProgram(std::ifstream &inf);
 		Statement*  parseLine(std::string);
 		int execute(char);

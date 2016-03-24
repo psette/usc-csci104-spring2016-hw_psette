@@ -42,9 +42,9 @@ values_window::values_window(Facile* pass_in_calc) {
 	v2 = new QVBoxLayout;
 	window = new QWidget;
 	ascending_name = new QRadioButton("Names ^");
-	descending_name = new QRadioButton("Names V");
+	descending_name = new QRadioButton("Names v");
 	ascending_value = new QRadioButton("Values ^");
-	descending_value = new QRadioButton("Values V");
+	descending_value = new QRadioButton("Values v");
 	hide_button = new QPushButton("Hide");
 	update = new QPushButton("update");
 	v2->addWidget(ascending_name);

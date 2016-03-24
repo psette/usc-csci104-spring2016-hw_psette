@@ -71,12 +71,14 @@ Statement* Facile::parseLine(string line){
 	else if( type == "RETURN")	return new RetrStatement();
 	else  return new EndStatement();
 }
-void Facile::inspect(){
-	Statement* temp = new PrALLStatement();
-	temp->execute(state,cout);
-	delete temp;
+std::vector<std::pair<std::string,int> >  Facile::getVals(){
+	std::vector<std::pair<std::string,int> > return_vec;
+	vec_filler temp;
+	return_vec = temp.filler(state);
+	return return_vec;
 }
 int Facile::execute(char type){
+	breakpoints[place] = false;
 	if(type == 's'){
 		program[place]->execute(state,cout);
 	}else if(type == 'n'){

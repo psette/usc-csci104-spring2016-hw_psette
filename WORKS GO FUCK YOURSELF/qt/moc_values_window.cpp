@@ -22,7 +22,7 @@ static const uint qt_meta_data_values_window[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -31,20 +31,15 @@ static const uint qt_meta_data_values_window[] = {
 
  // slots: signature, parameters, type, tag, flags
       15,   14,   14,   14, 0x0a,
-      28,   14,   14,   14, 0x0a,
-      42,   14,   14,   14, 0x0a,
-      54,   14,   14,   14, 0x0a,
-      67,   14,   14,   14, 0x0a,
-      78,   14,   14,   14, 0x0a,
-      89,   14,   14,   14, 0x0a,
+      26,   14,   14,   14, 0x0a,
+      39,   14,   14,   14, 0x0a,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_values_window[] = {
-    "values_window\0\0ascendName()\0descendName()\0"
-    "ascendVal()\0descendVal()\0hide_win()\0"
-    "show_win()\0update_win()\0"
+    "values_window\0\0show_win()\0update_win()\0"
+    "hide_win()\0"
 };
 
 void values_window::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -53,13 +48,9 @@ void values_window::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         Q_ASSERT(staticMetaObject.cast(_o));
         values_window *_t = static_cast<values_window *>(_o);
         switch (_id) {
-        case 0: _t->ascendName(); break;
-        case 1: _t->descendName(); break;
-        case 2: _t->ascendVal(); break;
-        case 3: _t->descendVal(); break;
-        case 4: _t->hide_win(); break;
-        case 5: _t->show_win(); break;
-        case 6: _t->update_win(); break;
+        case 0: _t->show_win(); break;
+        case 1: _t->update_win(); break;
+        case 2: _t->hide_win(); break;
         default: ;
         }
     }
@@ -98,9 +89,9 @@ int values_window::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 3;
     }
     return _id;
 }

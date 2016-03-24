@@ -50,6 +50,7 @@ Debugger::Debugger(QFile* file, std::string filename) {
 	QObject::connect(inspect_button, SIGNAL(clicked()), this, SLOT( inspect() ) );
 	QObject::connect(quit_button, SIGNAL(clicked()), this, SLOT( quit() ));
 	window->show();
+	row = 1;
 }
 void Debugger::setBreak(){
 	row = combo->currentRow();
@@ -58,7 +59,7 @@ void Debugger::setBreak(){
 }
 void Debugger::logic_error(){
 	std::stringstream ss;
-	ss << combo->currentRow();
+	ss << row;
 	std::string ErrorMsg = "Logic Error on or after line " + ss.str() + "\nProgram restarting";
 	reset();
 	QMessageBox::information(0, "Logic Error", QString::fromStdString(ErrorMsg) );
@@ -73,6 +74,7 @@ void Debugger::continue_func(){
 	}catch(std::logic_error){
 		logic_error();
 	}
+	if(-42 == row) std::cout<<"***************PROGRAM RESTARTED***************"<<std::endl;
 }
 void Debugger::step() {
 	try{
@@ -84,6 +86,7 @@ void Debugger::step() {
 	}catch(std::logic_error){
 		logic_error();
 	}
+	if(-42 == row) std::cout<<"***************PROGRAM RESTARTED***************"<<std::endl;
 }
 void Debugger::next(){
 	try{
@@ -95,6 +98,7 @@ void Debugger::next(){
 	}catch(std::logic_error){
 		logic_error();
 	}
+	if(-42 == row) std::cout<<"***************PROGRAM RESTARTED***************"<<std::endl;
 }
 void Debugger::inspect(){
 	val_win->show_win();

@@ -13,6 +13,7 @@
 #include "IfStatement.h"
 #include "EndStatement.h"
 #include "PrintStatement.h"
+#include "vec_filler.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -23,12 +24,12 @@ class Facile{
 	public:
 		Facile(std::string);
 		~Facile();
-		void inspect();
 		bool breakpoint(int);
 		void parseProgram(std::ifstream &inf);
 		Statement*  parseLine(std::string);
 		int execute(char);
 		void reset();
+		std::vector<std::pair<std::string,int> >  getVals();
 	private:
 		int place, size;
 		bool* breakpoints;

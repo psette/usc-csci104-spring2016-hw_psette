@@ -14,17 +14,14 @@
 #include <QMessageBox>
 #include <QTextStream>
 #include <vector>
+#include <QRadioButton>
 #include "../lib/Facile.h"
 class values_window : public QWidget {
 	Q_OBJECT
 	public slots:
-		void ascendName();
-		void descendName();
-		void ascendVal();
-		void descendVal();
-		void hide_win();
 		void show_win();
 		void update_win();
+		void hide_win();
 	public:
 		values_window(Facile*);
 		~values_window();
@@ -36,12 +33,12 @@ class values_window : public QWidget {
 		void sort(std::vector<T>&);
 	private:
 		QApplication *app;
-		QPushButton *ascending_name, *ascending_value, *hide_button;
-		QPushButton *descending_name, *descending_value, *update;
+		QRadioButton *ascending_name, *ascending_value, *descending_name, *descending_value;
+		QPushButton  *update, *hide_button;
 		QListWidget *combo;
 		QWidget *window;
 		QHBoxLayout *h1;
-		QVBoxLayout *v1;
+		QVBoxLayout *v1,*v2;
 		Facile * calc;
 		std::vector<std::pair<std::string,int> > values_vector;
 		char sort_type;

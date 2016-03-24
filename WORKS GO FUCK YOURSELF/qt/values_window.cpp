@@ -22,6 +22,7 @@ struct DescendValComp {
 	}
 };
 values_window::~values_window() {
+	delete v2;
 	delete h1;
 	delete v1;
 	delete combo;
@@ -38,40 +39,38 @@ values_window::values_window(Facile* pass_in_calc) {
 	h1 = new QHBoxLayout;
 	combo = new QListWidget;
 	v1 = new QVBoxLayout;
+	v2 = new QVBoxLayout;
 	window = new QWidget;
-	ascending_name = new QPushButton("Names ^");
-	descending_name = new QPushButton("Names V");
-	ascending_value = new QPushButton("Values ^");
-	descending_value = new QPushButton("Values V");
+	ascending_name = new QRadioButton("Names ^");
+	descending_name = new QRadioButton("Names V");
+	ascending_value = new QRadioButton("Values ^");
+	descending_value = new QRadioButton("Values V");
 	hide_button = new QPushButton("Hide");
 	update = new QPushButton("update");
-	h1->addWidget(ascending_name);
-	h1->addWidget(descending_name);
-	h1->addWidget(ascending_value);
-	h1->addWidget(descending_value);
+	v2->addWidget(ascending_name);
+	v2->addWidget(descending_name);
+	v2->addWidget(ascending_value);
+	v2->addWidget(descending_value);
 	h1->addWidget(hide_button);
 	h1->addWidget(update);
 	v1->addWidget(combo);
 	v1->addLayout(h1);
+	v1->addLayout(v2);
 	window->setLayout(v1);
 	window->setWindowTitle("values_window");
-	QObject::connect(ascending_name, SIGNAL(clicked()), this, SLOT( ascendName() ));
-	QObject::connect(descending_name, SIGNAL(clicked()), this, SLOT( descendName() ) );
-	QObject::connect(ascending_value, SIGNAL(clicked()), this, SLOT( ascendVal() ));
-	QObject::connect(descending_value, SIGNAL(clicked()), this, SLOT( descendVal() ));
 	QObject::connect(update, SIGNAL(clicked()), this, SLOT( update_win() ) );
 	QObject::connect(hide_button, SIGNAL(clicked()), this, SLOT( hide_win() ));
 }
 
 void values_window::update_win(){
 	getValues();
-	if('A' == sort_type){
+	if(ascending_name->isChecked()){
 		AscendNameComp comp;
 		mergesort(values_vector,0,values_vector.size(),comp);
-	} else if('B' == sort_type){
+	} else if(descending_name->isChecked()){
 		DescendNameComp comp;
 		mergesort(values_vector,0,values_vector.size(),comp);
-	} else if('C' == sort_type){
+	} else if(ascending_value->isChecked()){
 		AscendValComp comp;
 		mergesort(values_vector,0,values_vector.size(),comp);
 	} else{
@@ -79,18 +78,6 @@ void values_window::update_win(){
 		mergesort(values_vector,0,values_vector.size(),comp);
 	}
 	show_win_helper(); 
-}
-void values_window::ascendName(){
-	sort_type = 'A';
-}
-void values_window::descendName(){
-	sort_type = 'B';
-}
-void values_window::ascendVal(){
-	sort_type = 'C';
-}
-void values_window::descendVal(){
-	sort_type = 'D';
 }
 void values_window::getValues(){
 	combo->clear();

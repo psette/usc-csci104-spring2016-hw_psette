@@ -4,10 +4,12 @@
 - **USC ID**: 8626509080
 - **Email**: psette@usc.edu
 
+# DO NOT TYPE QMAKE -PROJECT (qmake will do)
+
 - **In debugger:**
-- When you set a breakpoint, the text turns blue.
-- Your current line is black background with white text. 
-- If you hit inspect when a Program is restaring, it still will display the variables
+  - When you set a breakpoint, the text turns blue.
+  - Your current line is black background with white text. 
+  - If you hit inspect when a Program is restaring, it still will display the variables
 
 - **In Load Window**
-- If no radio button is selected when you hit update, it will sort by ascending variable names
+  - If no radio button is selected when you hit update, it will sort by ascending variable names

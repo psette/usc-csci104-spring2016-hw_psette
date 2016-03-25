@@ -64,8 +64,8 @@ values_window::values_window(Facile* pass_in_calc) {
 
 void values_window::update_win(){
 	getValues();
-	if(ascending_name->isChecked()){
-		AscendNameComp comp;
+	if(descending_value->isChecked()){
+		DescendValComp comp;
 		mergesort(values_vector,0,values_vector.size(),comp);
 	} else if(descending_name->isChecked()){
 		DescendNameComp comp;
@@ -74,7 +74,7 @@ void values_window::update_win(){
 		AscendValComp comp;
 		mergesort(values_vector,0,values_vector.size(),comp);
 	} else{
-		DescendValComp comp;
+		AscendNameComp comp;
 		mergesort(values_vector,0,values_vector.size(),comp);
 	}
 	show_win_helper(); 

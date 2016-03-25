@@ -1,0 +1,37 @@
+Chasis:
+	-Truck, Racer, and Buggy all inherit from Chasis.
+	-Chasis has a purely virtual function that will modify how the car rides.
+	-This function will be defined in Truck, Racer, and Buggy because they modify the ride differently.
+	-Chasis also has private variables to store how each chasis modifies the car ride(ie suspension_height, etc).
+
+Engine:
+	-Nitrox, Warp, and PowerBlast all inherit from Engine.
+	-Engine has a purely virtual function that will modify how the car rides.
+	-This function will be defined in Nitrox, Warp, and PowerBlast because they modify the ride differently.
+	-Engine also has private variables to store how each engine modifies the car ride(ie top_speed, etc).
+
+Items:
+	-Car_Stereo, Spoiler, Bike_Rack, Flower_Vase and Weapons all inherit from Items.
+	-Items has a purely virtual function that will modify the car's appearance.
+	-This function will be defined in Car_Stereo, Spoiler, Bike_Rack, Flower_Vase and Weapons because they modify the appearance differently.
+	-Items also has private variables to store how each item modifies the car looks(ie size, etc).
+
+Weapons:
+	-Oil_Dispenser, Harpoon, Machine_Gun, and Grenade Launcher all inherit from Chasis.
+	-Chasis has a purely virtual fire function, defined in Oil_Dispenser, Harpoon, Machine_Gun, and Grenade Launcher because they fire differently.
+	-Chasis also has private variables to store how each chasis modifies the car ride.
+
+Car has:
+	-An instance of Chasis
+	-An instance of Engine
+	-An instance of Weapon
+	-A vector of Items
+	-A color variable
+
+Player has:
+	-An instance of Car
+	-A vector of Items
+	-A vector of Weapons
+	-variables strength, experience, and control
+
+Image is hosted on imgur (http://imgur.com/YdPKNLD)

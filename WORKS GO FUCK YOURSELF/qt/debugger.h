@@ -15,7 +15,7 @@ class Debugger : public QWidget {
 		~Debugger();
 		void reset();
 		void logic_error();
-		void program_done(bool);
+		void program_done(bool, bool);
 	private:
 		bool is_done;
 		int row, prev_row;

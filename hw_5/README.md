@@ -1,10 +1,9 @@
 # CS 104 Student Repository
+# DO NOT TYPE QMAKE -PROJECT (qmake will do)
 
 - **Name**: Pietro Sette
 - **USC ID**: 8626509080
 - **Email**: psette@usc.edu
-
-# DO NOT TYPE QMAKE -PROJECT (qmake will do)
 
 - **In debugger:**
   - When you set a breakpoint, the text turns blue.

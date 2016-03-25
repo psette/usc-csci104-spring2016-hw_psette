@@ -1,4 +1,4 @@
-# CS 104 Student Repository
+# HW 5 - CS 104 Student Repository
 # DO NOT TYPE QMAKE -PROJECT (qmake will do)
 
 - **Name**: Pietro Sette

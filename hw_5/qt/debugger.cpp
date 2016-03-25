@@ -68,8 +68,13 @@ void Debugger::logic_error(){
 	QMessageBox::information(0, "Logic Error", QString::fromStdString(ErrorMsg) );
 }
 void Debugger::program_done(bool is_done, bool continue_statement){
-	if(is_done) 
+	if(is_done) {
+		for(int i = 0; i < combo->count(); ++i){
+			combo->item(i)->setBackground(Qt::white);
+			combo->item(i)->setForeground(Qt::black);
+		}
 		std::cout<<"***************PROGRAM RESTARTING***************"<<std::endl;
+	}
 	else {
 		if(continue_statement)	row += 2;
 		for(int i = 0; i < combo->count(); ++i){

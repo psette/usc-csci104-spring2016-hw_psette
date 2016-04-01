@@ -13,9 +13,9 @@ MazeSolver::MazeSolver(Maze * m, MazeDisplay * md)
 
 
 bool MazeSolver::DFSRecursiveHelper(int r, int c, VisitedTracker& visited,std::vector<Direction>& ref){
-    if( maze-> getGoalRow() == r && maze -> getGoalCol() == c)    return true;
+    if( maze->getStartCol() == c && maze->getStartRow() == r) return true;
     if ( maze->canTravel(UP, r, c) && ! visited.isVisited(r-1,c)){
-        ref[squareNumber(r-1, c)] = UP;
+        ref[squareNumber(r-1, c)] = DOWN;
         visited.setVisited(r-1,c);
         if ( DFSRecursiveHelper(r-1,c,visited,ref)) {
             path.push_back(ref[squareNumber(r-1,c)]);
@@ -24,7 +24,7 @@ bool MazeSolver::DFSRecursiveHelper(int r, int c, VisitedTracker& visited,std::v
         }
     }
     if ( maze->canTravel(DOWN, r, c) && ! visited.isVisited(r+1,c) ){
-        ref[squareNumber(r+1, c)] = DOWN;
+        ref[squareNumber(r+1, c)] = UP;
         visited.setVisited(r+1, c);
         if ( DFSRecursiveHelper(r+1,c,visited,ref)){
             path.push_back(ref[squareNumber(r+1,c)]);
@@ -33,16 +33,16 @@ bool MazeSolver::DFSRecursiveHelper(int r, int c, VisitedTracker& visited,std::v
         }
     }
     if ( maze->canTravel(LEFT, r, c) && ! visited.isVisited(r,c-1) ){
-        ref[squareNumber(r, c-1)] = LEFT;
+        ref[squareNumber(r, c-1)] = RIGHT;
         visited.setVisited(r, c-1);
         if ( DFSRecursiveHelper(r,c-1,visited,ref)){
             path.push_back(ref[squareNumber(r,c-1)]);
             numExplored_DFS++;
             return true;            
-        }    
+        }
      }
     if ( maze->canTravel(RIGHT, r, c) && ! visited.isVisited(r, c+1) ){
-        ref[squareNumber(r, c+1)] = RIGHT;
+        ref[squareNumber(r, c+1)] = LEFT;
         visited.setVisited(r, c+1);
         if ( DFSRecursiveHelper(r,c+1,visited,ref)){
             path.push_back(ref[squareNumber(r,c+1)]);
@@ -55,16 +55,13 @@ bool MazeSolver::DFSRecursiveHelper(int r, int c, VisitedTracker& visited,std::v
 void MazeSolver::solveByDFSRecursive(){   
     VisitedTracker visited(maze->numRows(), maze->numCols());
     std::vector<Direction> ref( maze->numRows() * maze->numCols() ); 
-    if(DFSRecursiveHelper(maze->getStartRow(),maze->getStartCol(),visited,ref))
+    if(DFSRecursiveHelper(maze->getGoalRow(),maze->getGoalCol(),visited,ref))
         display->reportSolution(path, visited, numExplored_DFS);
     path.clear();
 
 }
 void MazeSolver::solveByAStar(int choice){
-    // TODO:
-    //    if choice is 1, solve by A* using heuristic of "return 0"
-    //    else if choice is 2, solve by A* using heuristic of Manhattan Distance
-    //    else if choice is 3, solve by A* using heuristic of Euclidean Distance
+    
    switch (choice){
         case 1:
           //  A* with return 0;

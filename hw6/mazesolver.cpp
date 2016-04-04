@@ -51,18 +51,15 @@ bool MazeSolver::DFSRecursiveHelper(int r, int c, VisitedTracker& visited,std::v
 void MazeSolver::solveByDFSRecursive(){   
     VisitedTracker visited(maze->numRows(), maze->numCols());
     std::vector<Direction> ref( maze->numRows() * maze->numCols() ); 
-    if(DFSRecursiveHelper(maze->getGoalRow(),maze->getGoalCol(),visited,ref)){
+    if(DFSRecursiveHelper(maze->getGoalRow(),maze->getGoalCol(),visited,ref))
         display->reportSolution(path, visited, numExplored_DFS);
-        std::cout<<"count:\t"<<path.size()<<std::endl;
-    }
     path.clear();
-
 }
 void MazeSolver::solveByAStar(int choice){
     std::vector<Direction> parent( maze->numRows() * maze->numCols() );
     int rows = maze->numRows(), cols = maze->numCols();
     int rowsFinal = maze->getGoalRow(), colFinal = maze->getGoalCol();
-    double** h = new double*[rows];
+    int** h = new int*[rows];
     int** distances = new int*[rows];
     int r, c, numExplored = 0;
     VisitedTracker vt(maze->numRows(), maze->numCols());
@@ -70,7 +67,7 @@ void MazeSolver::solveByAStar(int choice){
         case 2:{
            // A* with Manhattan;
             for(int i = 0; i < rows; ++i){
-                h[i] = new double[cols];
+                h[i] = new int[cols];
                 distances[i] = new int[cols];
                 for(int j = 0; j < cols; ++j) {
                     distances[i][j] = -1;
@@ -82,7 +79,7 @@ void MazeSolver::solveByAStar(int choice){
         case 3:{
         //   A* with Euclidean;
                 for(int i = 0; i < rows; ++i){
-                    h[i] = new double[cols];
+                    h[i] = new int[cols];
                     distances[i] = new int[cols];
                 for(int j = 0; j < cols; ++j) {
                     distances[i][j] = -1;
@@ -94,7 +91,7 @@ void MazeSolver::solveByAStar(int choice){
         default:{
         //  A* with return 0;
                 for(int i = 0; i < rows; ++i){
-                    h[i] = new double[cols];
+                    h[i] = new int[cols];
                     distances[i] = new int[cols];
                 for(int j = 0; j < cols; ++j) {
                     distances[i][j] = -1;
@@ -116,22 +113,19 @@ void MazeSolver::solveByAStar(int choice){
         if( r == maze->getGoalRow() && c == maze->getGoalCol() ){
             std::vector<Direction> path;
             std::stack<Direction> st;
-            int count = 0;
             while( r != maze->getStartRow() || c != maze->getStartCol()){
                 st.push( parent[ squareNumber(r,c) ]);
                 switch( st.top() ){
-                case UP: r++; break; // yes, r++.  I went up to get here...
+                case UP: r++; break;
                 case DOWN: r--; break;
                 case LEFT: c++; break;
                 case RIGHT: c--; break;
                 }
             }
             while ( ! st.empty() ){
-                count++;
                 path.push_back(st.top());
                 st.pop();
             }
-            std::cout<<"count:\t"<<count<<std::endl;
             display->reportSolution(path, vt, numExplored);
             for(int i = 0; i < rows; ++i){
                 delete [] distances[i]; 
@@ -179,11 +173,7 @@ void MazeSolver::solveByAStar(int choice){
         }
     }
 }
-
-
-
-void MazeSolver::solveByDFSIterative()
-{
+void MazeSolver::solveByDFSIterative(){
     int r, c;
     int numSquares = maze->numRows() * maze->numCols();
     VisitedTracker vt(maze->numRows(), maze->numCols());
@@ -193,7 +183,6 @@ void MazeSolver::solveByDFSIterative()
     vt.setVisited(maze->getStartRow(), maze->getStartCol());
     std::stack<std::pair<int, int>> q;
     q.push(std::pair<int,int>(maze->getStartRow(), maze->getStartCol()));
-    int count = 0;
     while( ! q.empty() )
     {
         std::pair<int, int> v = q.top();
@@ -226,11 +215,9 @@ void MazeSolver::solveByDFSIterative()
             }
             while ( ! st.empty() )
             {
-                count++;
                 path.push_back(st.top());
                 st.pop();
             }
-            std::cout<<"count:\t"<<count<<std::endl;
             display->reportSolution(path, vt, numExplored);
             return;
         }
@@ -308,7 +295,6 @@ void MazeSolver::solveByBFS()
         {
             std::vector<Direction> path;
             std::stack<Direction> st;
-            int count = 0;
             while( r != maze->getStartRow() || c != maze->getStartCol())
             {
                 st.push( parent[ squareNumber(r,c) ]);
@@ -322,12 +308,9 @@ void MazeSolver::solveByBFS()
             }
             while ( ! st.empty() )
             {
-               count++;
                 path.push_back(st.top());
                 st.pop();
             }
-            std::cout<<"count:\t"<<count<<std::endl;
-
             display->reportSolution(path, vt, numExplored);
             return;
         }

@@ -7,23 +7,23 @@ class MinHeap {
      public:
        MinHeap (int d);
       ~MinHeap ();
-       void add (T item, int priority);
+       void add (T item, double priority);
        const T & peek () const;
        void remove ();
        bool isEmpty ();
        void trickle_up(int);
        void trickle_down(int);
-       void swap(std::pair <int,T>&, std::pair <int,T>&);
+       void swap(std::pair <double,T>&, std::pair <double,T>&);
    private:
             int dvalue;
-      std::vector<std::pair<int,T> > tree_vec;
+      std::vector<std::pair<double,T> > tree_vec;
 };
 template <typename T> 
 MinHeap<T>::MinHeap(int d):dvalue(d){};
 template <typename T> 
 MinHeap<T>::~MinHeap() {};
 template <typename T> 
-void MinHeap<T>::add (T item, int priority){
+void MinHeap<T>::add (T item, double priority){
   tree_vec.push_back(std::make_pair(priority, item));
   trickle_up( tree_vec.size() - 1 );
 };
@@ -43,8 +43,8 @@ bool MinHeap<T>::isEmpty (){
    return tree_vec.empty();
 };
 template <typename T> 
-void MinHeap<T>::swap(std::pair <int,T>& A, std::pair <int,T>& B){
-   std::pair <int,T> temp = A;
+void MinHeap<T>::swap(std::pair <double,T>& A, std::pair <double,T>& B){
+   std::pair <double,T> temp = A;
    A = B;
    B = temp;
 };
@@ -58,7 +58,8 @@ void MinHeap<T>::trickle_up(int child){
 };
 template <typename T> 
 void MinHeap<T>::trickle_down(int parent){
-   int child = dvalue * parent + 1, min = tree_vec[parent].first, min_loc = 0;
+   int child = dvalue * parent + 1;
+   double min = tree_vec[parent].first, min_loc = 0;
    for(int i = 0; i < dvalue; ++i, ++child){
       if(child < tree_vec.size() && min > tree_vec[child].first){
          min = tree_vec[child].first;

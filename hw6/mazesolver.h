@@ -2,6 +2,7 @@
 #define MAZESOLVER_H
 
 #include "maze.h"
+#include "heap.h"
 #include "visitedtracker.h"
 
 /*

@@ -62,15 +62,15 @@ void MazeSolver::solveByAStar(int choice){
     std::vector<Direction> parent( maze->numRows() * maze->numCols() );
     int rows = maze->numRows(), cols = maze->numCols();
     int rowsFinal = maze->getGoalRow(), colFinal = maze->getGoalCol();
-    double** h = new double*[rows];
+    float** h = new float*[rows];
     int** distances = new int*[rows];
-    int r, c, numExplored = 0;
+    int r = 0, c = 0, numExplored = 0, parent_row = 0, parent_col = 0;
     VisitedTracker vt(maze->numRows(), maze->numCols());
     switch (choice){
         case 2:{
            // A* with Manhattan;
             for(int i = 0; i < rows; ++i){
-                h[i] = new double[cols];
+                h[i] = new float[cols];
                 distances[i] = new int[cols];
                 for(int j = 0; j < cols; ++j) {
                     distances[i][j] = -1;
@@ -82,7 +82,7 @@ void MazeSolver::solveByAStar(int choice){
         case 3:{
         //   A* with Euclidean;
                 for(int i = 0; i < rows; ++i){
-                    h[i] = new double[cols];
+                    h[i] = new float[cols];
                     distances[i] = new int[cols];
                 for(int j = 0; j < cols; ++j) {
                     distances[i][j] = -1;
@@ -94,11 +94,11 @@ void MazeSolver::solveByAStar(int choice){
         default:{
         //  A* with return 0;
                 for(int i = 0; i < rows; ++i){
-                    h[i] = new double[cols];
+                    h[i] = new float[cols];
                     distances[i] = new int[cols];
                 for(int j = 0; j < cols; ++j) {
                     distances[i][j] = -1;
-                    h[i][j] = 0;
+                    h[i][j] = 1;
                 }
             }
             break;
@@ -106,9 +106,15 @@ void MazeSolver::solveByAStar(int choice){
     }
     distances[maze->getStartRow()][maze->getStartRow()] = 0;
     MinHeap<std::pair<int, int>> pq(2);
-    pq.add(std::pair<int,int>(maze->getStartRow(), maze->getStartCol() ), 0);
+    r = maze->getStartRow();
+    c = maze->getStartCol();
+    pq.add(std::pair<int,int>(r,c), 0);
+    r = rowsFinal;
+    c = colFinal;
     while( !pq.isEmpty() ) {
         numExplored++;
+        parent_row = r;
+        parent_col = c;
         std::pair<int,int> v = pq.peek();
         r = v.first;
         c = v.second;
@@ -141,42 +147,43 @@ void MazeSolver::solveByAStar(int choice){
             delete distances;
             return;
         }
-        if( maze->canTravel(RIGHT, r, c) && ! vt.isVisited(r,c+1) ){
-            distances[r][c + 1] = distances[r][c] + 1; 
+        if( maze->canTravel(RIGHT, r, c) && c + 1 < cols && parent_col != c + 1){
+            if(distances[r][c + 1] == -1) distances[r][c + 1] = distances[r][c] + 1; 
             parent[squareNumber(r, c + 1)] = RIGHT;
-            vt.setVisited(r, c + 1);
+            if( !vt.isVisited(r,c+1) ) vt.setVisited(r, c + 1);
             std::pair<int,int> AddIn;
             AddIn.first = r;
             AddIn.second = c + 1;
-            pq.add(AddIn, distances[r][c] + h[r][c+1]);
+            pq.add(AddIn, distances[r][c+1] + h[r][c + 1]);
         }
-        if( maze->canTravel(LEFT, r, c) && ! vt.isVisited(r,c-1)){
-            distances[r][c - 1] = distances[r][c] + 1; 
+        if( maze->canTravel(LEFT, r, c) && c - 1 >= 0 && parent_col != c - 1){
+            if( distances[r][c - 1] == -1) distances[r][c - 1] = distances[r][c] + 1; 
             parent[squareNumber(r, c - 1)] = LEFT;
-            vt.setVisited(r, c - 1);
+            if( !vt.isVisited(r,c-1) ) vt.setVisited(r, c - 1);
             std::pair<int,int> AddIn;
             AddIn.first = r;
             AddIn.second = c - 1;
-            pq.add(AddIn, distances[r][c] + h[r][c-1]);
-        } 
-        if( maze->canTravel(DOWN, r, c) && ! vt.isVisited(r+1,c)){
-            distances[r + 1][c] = distances[r][c] + 1; 
+            pq.add(AddIn, distances[r][c-1] + h[r][c - 1]);
+        }
+        if( maze->canTravel(DOWN, r, c) && r + 1 < rows && parent_row != r + 1){
+            if(distances[r + 1][c] == -1) distances[r + 1][c] = distances[r][c] + 1; 
             parent[squareNumber(r + 1, c)] = DOWN;
-            vt.setVisited(r + 1, c);
+            if( !vt.isVisited(r + 1,c) ) vt.setVisited(r + 1, c);
             std::pair<int,int> AddIn;
             AddIn.first = r + 1;
             AddIn.second = c;
-            pq.add(AddIn, distances[r][c] + h[r + 1][c]);
+            pq.add(AddIn, distances[r+1][c] + h[r + 1][c]);
         } 
-        if( maze->canTravel(UP, r, c) && ! vt.isVisited(r-1,c) ){
-            distances[r - 1][c] = distances[r][c] + 1; 
+        if( maze->canTravel(UP, r, c) && r - 1 >= 0 && parent_row != r - 1){
+            if ( distances[r - 1][c] == -1) distances[r - 1][c] = distances[r][c] + 1; 
             parent[squareNumber(r - 1, c)] = UP;
-            vt.setVisited(r - 1,c);
+            if( !vt.isVisited(r-1,c) ) vt.setVisited(r - 1,c);
             std::pair<int,int> AddIn;
             AddIn.first = r - 1;
             AddIn.second = c;
-            pq.add(AddIn, distances[r][c] + h[r - 1][c]);
+            pq.add(AddIn, distances[r-1][c] + h[r - 1][c]);
         }
+        std::cout<<"WHILE END"<<std::endl;
     }
 }
 

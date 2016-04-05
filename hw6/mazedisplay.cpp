@@ -44,6 +44,7 @@ void MazeDisplay::generateMaze()
         maze = createMaze(50, 50, simpleChoiceBox->isChecked());
     else if ( mazeChoices->currentText().toStdString() == "huge")
         maze = createMaze(75, 75, simpleChoiceBox->isChecked());
+    solver->setMaze(maze);
     drawMaze();
 }
 

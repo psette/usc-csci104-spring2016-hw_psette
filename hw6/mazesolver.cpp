@@ -126,6 +126,7 @@ void MazeSolver::solveByAStar(int choice){
                 path.push_back(st.top());
                 st.pop();
             }
+            std::cout<<"ASTAR\t"<<path.size()<<std::endl;
             display->reportSolution(path, vt, numExplored);
             for(int i = 0; i < rows; ++i){
                 delete [] distances[i]; 
@@ -135,14 +136,14 @@ void MazeSolver::solveByAStar(int choice){
             delete distances;
             return;
         }
-        if( maze->canTravel(RIGHT, r, c) && ! vt.isVisited(r,c+1) ){
+        if( maze->canTravel(RIGHT, r, c) && ! vt.isVisited(r,c+1)){
             distances[r][c + 1] = distances[r][c] + 1; 
             parent[squareNumber(r, c + 1)] = RIGHT;
             vt.setVisited(r, c + 1);
             std::pair<int,int> AddIn;
             AddIn.first = r;
             AddIn.second = c + 1;
-            pq.add(AddIn, distances[r][c] + h[r][c+1]);
+            pq.add(AddIn, distances[r][c] * 2 + h[r][c+1]);
         }
         if( maze->canTravel(LEFT, r, c) && ! vt.isVisited(r,c-1)){
             distances[r][c - 1] = distances[r][c] + 1; 
@@ -151,7 +152,7 @@ void MazeSolver::solveByAStar(int choice){
             std::pair<int,int> AddIn;
             AddIn.first = r;
             AddIn.second = c - 1;
-            pq.add(AddIn, distances[r][c] + h[r][c-1]);
+            pq.add(AddIn, distances[r][c] * 2 + h[r][c-1]);
         } 
         if( maze->canTravel(DOWN, r, c) && ! vt.isVisited(r+1,c)){
             distances[r + 1][c] = distances[r][c] + 1; 
@@ -160,16 +161,16 @@ void MazeSolver::solveByAStar(int choice){
             std::pair<int,int> AddIn;
             AddIn.first = r + 1;
             AddIn.second = c;
-            pq.add(AddIn, distances[r][c] + h[r + 1][c]);
+            pq.add(AddIn, distances[r][c] * 2 + h[r + 1][c]);
         } 
-        if( maze->canTravel(UP, r, c) && ! vt.isVisited(r-1,c) ){
+        if( maze->canTravel(UP, r, c) && ! vt.isVisited(r-1,c)){
             distances[r - 1][c] = distances[r][c] + 1; 
             parent[squareNumber(r - 1, c)] = UP;
             vt.setVisited(r - 1,c);
             std::pair<int,int> AddIn;
             AddIn.first = r - 1;
             AddIn.second = c;
-            pq.add(AddIn, distances[r][c] + h[r - 1][c]);
+            pq.add(AddIn, distances[r][c] * 2 + h[r - 1][c]);
         }
     }
 }
@@ -311,6 +312,7 @@ void MazeSolver::solveByBFS()
                 path.push_back(st.top());
                 st.pop();
             }
+            std::cout<<"BFS\t"<<path.size()<<std::endl;   
             display->reportSolution(path, vt, numExplored);
             return;
         }
@@ -354,5 +356,3 @@ int MazeSolver::squareNumber(int r, int c) const
 {
     return maze->numCols() * r + c;
 }
-
-

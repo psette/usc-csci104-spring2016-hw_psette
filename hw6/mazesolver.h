@@ -31,6 +31,7 @@ public:
     void solveByDFSRecursive();
 
     void solveByAStar(int heuristicChoice);
+    void setMaze(Maze* m) { maze = m; }
 
 private:
 	bool DFSRecursiveHelper(int, int, VisitedTracker&, std::vector<Direction>&);

@@ -61,7 +61,7 @@ void MazeSolver::solveByAStar(int choice){
     int rowsFinal = maze->getGoalRow(), colFinal = maze->getGoalCol();
     int** h = new int*[rows];
     int** distances = new int*[rows];
-    int r, c, numExplored = 0;
+    int r = 0, c = 0, numExplored = 0, max_Distance = rows + cols;
     VisitedTracker vt(maze->numRows(), maze->numCols());
     switch (choice){
         case 2:{
@@ -78,9 +78,10 @@ void MazeSolver::solveByAStar(int choice){
         }
         case 3:{
         //   A* with Euclidean;
-                for(int i = 0; i < rows; ++i){
-                    h[i] = new int[cols];
-                    distances[i] = new int[cols];
+            max_Distance = sqrt(rows * rows + cols * cols);
+            for(int i = 0; i < rows; ++i){
+                h[i] = new int[cols];
+                distances[i] = new int[cols];
                 for(int j = 0; j < cols; ++j) {
                     distances[i][j] = -1;
                     h[i][j] = pow(pow(i - rowsFinal, 2) + pow(j - colFinal, 2), .5);
@@ -90,9 +91,9 @@ void MazeSolver::solveByAStar(int choice){
         }
         default:{
         //  A* with return 0;
-                for(int i = 0; i < rows; ++i){
-                    h[i] = new int[cols];
-                    distances[i] = new int[cols];
+            for(int i = 0; i < rows; ++i){
+                h[i] = new int[cols];
+                distances[i] = new int[cols];
                 for(int j = 0; j < cols; ++j) {
                     distances[i][j] = -1;
                     h[i][j] = 0;
@@ -143,7 +144,7 @@ void MazeSolver::solveByAStar(int choice){
             std::pair<int,int> AddIn;
             AddIn.first = r;
             AddIn.second = c + 1;
-            pq.add(AddIn, distances[r][c] * 2 + h[r][c+1]);
+            pq.add(AddIn, max_Distance * (distances[r][c] + h[r][c+1]) + distances[r][c]) ;
         }
         if( maze->canTravel(LEFT, r, c) && ! vt.isVisited(r,c-1)){
             distances[r][c - 1] = distances[r][c] + 1; 
@@ -152,7 +153,7 @@ void MazeSolver::solveByAStar(int choice){
             std::pair<int,int> AddIn;
             AddIn.first = r;
             AddIn.second = c - 1;
-            pq.add(AddIn, distances[r][c] * 2 + h[r][c-1]);
+            pq.add(AddIn, max_Distance * (distances[r][c] + h[r][c+1]) + distances[r][c]);
         } 
         if( maze->canTravel(DOWN, r, c) && ! vt.isVisited(r+1,c)){
             distances[r + 1][c] = distances[r][c] + 1; 
@@ -161,7 +162,7 @@ void MazeSolver::solveByAStar(int choice){
             std::pair<int,int> AddIn;
             AddIn.first = r + 1;
             AddIn.second = c;
-            pq.add(AddIn, distances[r][c] * 2 + h[r + 1][c]);
+            pq.add(AddIn, max_Distance * (distances[r][c] + h[r][c+1]) + distances[r][c]);
         } 
         if( maze->canTravel(UP, r, c) && ! vt.isVisited(r-1,c)){
             distances[r - 1][c] = distances[r][c] + 1; 
@@ -170,7 +171,7 @@ void MazeSolver::solveByAStar(int choice){
             std::pair<int,int> AddIn;
             AddIn.first = r - 1;
             AddIn.second = c;
-            pq.add(AddIn, distances[r][c] * 2 + h[r - 1][c]);
+            pq.add(AddIn, max_Distance * (distances[r][c] + h[r][c+1]) + distances[r][c]);
         }
     }
 }

@@ -10,5 +10,5 @@
 - **Problem 3**
   - heap.h
 
-- **Problem 3**
-  -Type in "qmake && make && ./debugger" to compile and run
+- **Problem 4**
+  - Type in "qmake && make && ./debugger" to compile and run

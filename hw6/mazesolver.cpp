@@ -6,7 +6,6 @@
 #include <stack>
 #include <vector>
 #include <cmath>
-#include <iostream>
 MazeSolver::MazeSolver(Maze * m, MazeDisplay * md): maze(m), display(md){}
 bool MazeSolver::DFSRecursiveHelper(int r, int c, VisitedTracker& visited,std::vector<Direction>& ref){
     if( maze->getStartCol() == c && maze->getStartRow() == r) return true;
@@ -127,7 +126,6 @@ void MazeSolver::solveByAStar(int choice){
                 path.push_back(st.top());
                 st.pop();
             }
-            std::cout<<"ASTAR\t"<<path.size()<<std::endl;
             display->reportSolution(path, vt, numExplored);
             for(int i = 0; i < rows; ++i){
                 delete [] distances[i]; 
@@ -312,8 +310,7 @@ void MazeSolver::solveByBFS()
             {
                 path.push_back(st.top());
                 st.pop();
-            }
-            std::cout<<"BFS\t"<<path.size()<<std::endl;   
+            } 
             display->reportSolution(path, vt, numExplored);
             return;
         }

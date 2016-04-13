@@ -1,0 +1,57 @@
+ AVLNode<KeyType, ValueType>* deleteNode(AVLNode<KeyType, ValueType>* node, const KeyType &toRemove){
+    if (node == NULL)  return NULL;
+    AVLNode<KeyType, ValueType> *temp, *parent = node ->getParent(), *right = node->getRight(), *left = node->getLeft();
+    if(toRemove == node->getKey()){
+      if(left == NULL && right == NULL){
+        if(parent == NULL) {
+          delete node;
+        } 
+        parent -> getLeft() == node ? parent -> setLeft(NULL) : parent ->setRight(NULL);
+        SetBalanceAndHeights(node);
+      } else if( left == NULL){
+        parent->getLeft() == node ? parent->setLeft(right) : parent->setRight(right);
+      } else if( right == NULL ){
+        parent->getRight() == node ? parent->setRight(left) : parent->setRight(left);
+      } else {
+          AVLNode<KeyType, ValueType>* switch_node = node -> getRight();
+          while( switch_node -> getLeft() != NULL) switch_node = switch_node -> getLeft(); 
+          temp = node;
+          node = new AVLNode<KeyType, ValueType>(switch_node->getKey(),switch_node->getValue(), parent);
+          delete temp;
+          node->setRight(deleteNode(node->getRight(), temp->getKey() ));
+      } 
+    }else{
+      deleteNode(toRemove < node->getKey() ? node->getLeft(): node->getRight(),toRemove);
+    } 
+    int left_height = left == NULL ? 0 : left -> getHeight();
+    int left_left = left -> getLeft() ==  NULL ? 0 : left -> getLeft() -> getHeight();
+    int left_right = left -> getLeft() ==  NULL ? 0 : left -> getRight() -> getHeight();
+    int right_height = right == NULL ? 0 : left -> getHeight();
+    int right_right = right -> getRight() ==  NULL ? 0 : right -> getRight() -> getHeight();
+    int right_left = right -> getRight() ==  NULL ? 0 : right -> getLeft() -> getHeight();
+    if (left_height > right_height + 1 && left_left >= right_height) return rightRotate(node);
+    if (left_height + 1 < right_height && right_right <= right_left) return leftRotate(node);
+    if (left_height > right_height + 1 && left_left < left_right ){
+        node->setLeft(leftRotate(node->getLeft() ));
+        return rightRotate(node);
+    }
+    if (left_height + 1 < right_height && right_left > right_right ){
+        node->setLeft(leftRotate(node->getLeft()));
+        return rightRotate(node);
+    }
+    return node;
+}
+  AVLNode<KeyType,ValueType>* rightRotate(AVLNode<KeyType,ValueType> *y){
+    AVLNode<KeyType,ValueType>* x = y->getLeft();
+    AVLNode<KeyType,ValueType>* T2 = x->getRight();
+    x->setRight(y);
+    y->setLeft(T2);
+    return x;
+  }
+  AVLNode<KeyType,ValueType>* leftRotate(AVLNode<KeyType,ValueType>* x){
+    AVLNode<KeyType,ValueType>* y = x->getRight();
+    AVLNode<KeyType,ValueType>* T2 = y->getLeft();
+    y->setLeft(x);
+    x->setRight(T2);
+    return y;
+  }

@@ -67,13 +67,12 @@ public:
     insertHelper(static_cast<AVLNode<KeyType,ValueType>*>(this->root),new_item,static_cast<AVLNode<KeyType,ValueType>*>(this->root));
   }
   void remove (const KeyType &toRemove){
-   /* try{
+   try{
       removeHelper(static_cast<AVLNode<KeyType,ValueType>*>(this->root),toRemove);
     }catch (std::logic_error& e){
       std::cerr<<"ERROR"<<std::endl;
     }
-    */
-    deleteNode(static_cast<AVLNode<KeyType,ValueType>*>(this->root), toRemove);
+
   }
 private:
   AVLNode<KeyType, ValueType>* insertHelper(AVLNode<KeyType, ValueType>* node, const std::pair<const KeyType, ValueType>& new_item, AVLNode<KeyType, ValueType>* parent){
@@ -99,74 +98,59 @@ private:
     return parent != NULL && parent-> getLeft() == node ? parent -> getRight() != NULL : parent -> getLeft() != NULL;
   }
   void SetBalanceAndHeights(AVLNode<KeyType, ValueType>* node ){
-    if( node ->getParent() != NULL && !hasSibiling(node) ){
+    if(node -> getParent() == NULL ) return;
+    if(!hasSibiling(node) ){
     AVLNode<KeyType, ValueType>* temp = node;
-      while(node != this->root){
-        node ->setHeight(node->getHeight() - 1);
+      while(node -> getParent() != NULL){
+        HeightHelper(node);
         node = node -> getParent();
-        if( node->getLeft() == NULL || node->getRight() == NULL) continue;
-        if( abs(node ->getLeft() -> getHeight() - node ->getLeft()->getHeight()) > 1 ) balance(node);
       }
     }
   }
-  void deleteNode(AVLNode<KeyType, ValueType>* node, const KeyType &toRemove){
-    if (node == NULL)  throw std::logic_error("Not in Tree");
-    AVLNode<KeyType, ValueType> *temp, *parent = node ->getParent(), *right = node->getRight(), *left = node->getLeft();
-    if(toRemove == node->getKey()){
-      if(left == NULL && right == NULL){
-        if(parent == NULL) {
-          delete node;
-        } 
-        parent -> getLeft() == node ? parent -> setLeft(NULL) : parent ->setRight(NULL);
-        SetBalanceAndHeights(node);
-      } else if( left == NULL){
-        parent->getLeft() == node ? parent->setLeft(right) : parent->setRight(right);
-      } else if( right == NULL ){
-        parent->getRight() == node ? parent->setRight(left) : parent->setRight(left);
-      } else {
-          AVLNode<KeyType, ValueType>* switch_node = node -> getRight();
-          while( switch_node -> getLeft() != NULL) switch_node = switch_node -> getLeft(); 
-          temp = node;
-          node = new AVLNode<KeyType, ValueType>(switch_node->getKey(),switch_node->getValue(), parent);
-          delete temp;
-      } 
-    }else{
-      deleteNode(toRemove < node->getKey() ? node->getLeft(): node->getRight(),toRemove);
-    }
-    balance(node);
-}
-  void removeHelper(AVLNode<KeyType, ValueType>* node, const KeyType& value) {
-            std::cerr<<value<<std::endl;
+  void removeHelper(AVLNode<KeyType, ValueType>* node, const KeyType& value){
     if(node == NULL) throw std::logic_error("Not in Tree");
     else if(node -> getKey() == value) {
       AVLNode<KeyType, ValueType>* parent = node -> getParent();
       if(parent == NULL){
-        AVLNode<KeyType, ValueType>* temp = node -> getRight();
-        while( temp -> getLeft() != NULL) temp = temp -> getLeft();
-        temp ->setParent(NULL);
-        temp -> setLeft(node->getLeft());
-        temp -> setRight(node->getRight());
-        this->root = temp;
-        SetBalanceAndHeights(temp);
+        AVLNode<KeyType, ValueType>* switch_to = node -> getRight(), *temp = node -> getRight();
+        while( switch_to -> getLeft() != NULL) switch_to = switch_to -> getLeft();
+          switch_to ->setParent(NULL);
+          switch_to -> setLeft(node->getLeft());
+          switch_to -> setRight(node->getRight());
+          switch_to -> getLeft() -> setParent(switch_to);
+          switch_to -> getRight() -> setParent(switch_to);
+          this->root = switch_to;
+          delete node;
+          SetBalanceAndHeights(temp);
       }
       if ((node->getLeft() == NULL) && (node->getRight() == NULL)){
         parent -> getLeft() == node ? parent -> setLeft(NULL) : parent ->setRight(NULL);
+        node->getRight()->setParent(parent);
+        delete node;
         SetBalanceAndHeights(node);
       } else if( node -> getRight() == NULL){
-          parent -> getLeft() == node ? parent -> setLeft(node->getLeft()) : parent ->setRight(node -> getRight());
-          SetBalanceAndHeights(node);
+          AVLNode<KeyType, ValueType>* left = node ->getLeft();
+          parent -> getRight() == node ? parent -> setRight(node->getLeft()) : parent ->setLeft(node -> getLeft());
+          node->getLeft()->setParent(parent);
+          delete node;
+          SetBalanceAndHeights(left);
+      } else if(node -> getLeft() == NULL){
+          AVLNode<KeyType, ValueType>* right = parent -> getRight();
+          parent -> getLeft() == node ? parent -> setLeft(node->getRight()) : parent ->setRight(node -> getRight());
+          node->getRight()->setParent(parent);
+          delete node;
+          SetBalanceAndHeights(right);
       } else {
-        AVLNode<KeyType, ValueType>* temp = node -> getRight();
-        while( temp -> getLeft() != NULL) temp = temp -> getLeft();
-        if(parent != NULL)
-            parent -> getLeft() == node ? parent -> setLeft(temp) : parent ->setRight(temp);
-        temp ->setParent(parent);
-        temp -> setLeft(node->getLeft());
-        temp -> setRight(node->getRight());
-
-        SetBalanceAndHeights(temp);
+        AVLNode<KeyType, ValueType>* switch_to = node -> getRight(), *temp;
+        while( switch_to -> getLeft() != NULL) switch_to = switch_to -> getLeft();
+          switch_to ->setParent(parent);
+          switch_to -> setLeft(node->getLeft());
+          switch_to -> setRight(node->getRight());
+          switch_to -> getLeft() -> setParent(switch_to);
+          switch_to -> getRight() -> setParent(switch_to);
+          delete node;
+          SetBalanceAndHeights(temp);      
       }
-      delete node;
     } else removeHelper(node -> getKey() > value ? node -> getLeft() : node -> getRight(), value);
   }
   void HeightHelper(AVLNode<KeyType, ValueType>*& set){
@@ -196,11 +180,11 @@ private:
       if(left == NULL || (left -> getLeft() == NULL && left -> getRight() == NULL) ) HeightHelper(z);
     AVLNode<KeyType, ValueType> *y = left -> getHeight() > right -> getHeight() ? left : right;
     AVLNode<KeyType, ValueType> *x = y -> getLeft() -> getHeight() > y -> getRight() -> getHeight() ? left : right;
-    if(z -> getLeft() == y && x == y -> getLeft() ) {
+    if(z -> getLeft() == y && x == y -> getLeft() ){
       Left(z, y, parent);
       HeightHelper(y);
     }
-    else if( z-> getRight() == y && x == y->getRight() ) {
+    else if( z-> getRight() == y && x == y->getRight() ){
       Right(z,y,parent);
       HeightHelper(y);
     }

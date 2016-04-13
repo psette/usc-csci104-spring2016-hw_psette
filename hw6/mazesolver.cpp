@@ -131,8 +131,8 @@ void MazeSolver::solveByAStar(int choice){
                 delete [] distances[i]; 
                 delete [] h[i];
             }
-            delete h;
-            delete distances;
+            delete [] h;
+            delete [] distances;
             return;
         }
         if( maze->canTravel(RIGHT, r, c) && ! vt.isVisited(r,c+1)){

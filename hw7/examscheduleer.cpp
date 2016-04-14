@@ -5,11 +5,14 @@
 #include <vector>
 #include <cstdlib>
 #include <map>
+#include "avlbst.h"
 bool isValid(std::map<std::string,std::vector<int> >& classMap, std::map<int,int>& slotMap){
 	for(std::map<std::string,std::vector<int> >::iterator it = classMap.begin(); it!= classMap.end(); ++it){
 		for(unsigned i = 0; i < it -> second.size(); ++i){
 			for(unsigned j= 0; j < it -> second.size(); ++j){
-				if(slotMap[(it->second)[i]] == slotMap[(it->second)[j]] && i != j && slotMap[(it->second)[i]] != 0 )
+				if(i == j ) continue;
+				int i_val = slotMap.find(it->second[i])->second, jval = slotMap.find(it->second[j])->second;
+				if(i_val == jval && slotMap[it->second[i]] != 0 )
 					return false;
 			}
 		}
@@ -22,7 +25,7 @@ bool solveHelper(std::map<std::string,std::vector<int> >& classMap, std::map<int
 	if( index > it->second.size() )
 		if(++it == classMap.end() ) return true;
 	for(int i = 0; i < num_slots; ++i){
-		slotMap[ classesvec[index] ] = i + 1;
+		slotMap.find(classesvec[index])->second = i + 1;
 		if( isValid(classMap,slotMap) )
 			if(solveHelper(classMap,slotMap,it->first,classesvec, index + 1, num_slots)) return true;
 	}
@@ -55,7 +58,7 @@ int main(int argc, char* argv[]){
 			if(!isThere) classesvec.push_back(temp_class);
 			vec.push_back(temp_class);
 		}
-		classMap[student]= vec;
+		classMap.insert(std::make_pair(student,vec));
 	}
 	if(solveHelper(classMap, slotMap, classMap.begin()->first, classesvec, 0, num_slots)){
 		for(std::map<int,int>::iterator it = slotMap.begin(); it != slotMap.end(); ++it)

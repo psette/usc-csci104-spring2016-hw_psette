@@ -24,12 +24,13 @@ int main()
 	avl.insert(std::make_pair(12342,2));
 	avl.insert(std::make_pair(2311,1));
 	avl.remove(2311);
+	
+	avl.remove(20);
 	*/
-	avl.remove(10);
+	avl.remove(20);
 	std::cout << "********* Printing Inorder Now *********" << std::endl;
-	avl.print();
-	//for(AVLTree<int,int>::iterator it = avl.begin(); it != avl.end(); ++it)
-	//	std::cerr<<it->first<<std::endl;
+	for(AVLTree<int,int>::iterator it = avl.begin(); it != avl.end(); ++it)
+		std::cerr<<it->first<<std::endl;
 
 
 

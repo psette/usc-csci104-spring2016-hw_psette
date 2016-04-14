@@ -14,7 +14,7 @@
  ------------------------------------------------------*/
 
 template <class KeyType, class ValueType>
-  class Node {
+class Node {
  public:
   Node (const KeyType & k, const ValueType & v, Node<KeyType, ValueType> *p)
     : _item(k, v)
@@ -75,9 +75,6 @@ template <class KeyType, class ValueType>
 
 template <class KeyType, class ValueType>
 class BinarySearchTree {
- protected:
-  // Main data member of the class
-  Node<KeyType, ValueType> *root;
 
  public:
   /**
@@ -111,7 +108,9 @@ class BinarySearchTree {
     /**
      * Initialize the internal members of the iterator
      */
-    iterator(Node<KeyType,ValueType>* ptr);
+    iterator(Node<KeyType,ValueType>* ptr){
+      curr = ptr;
+    }
     
     std::pair<const KeyType,ValueType>& operator*()
       { return curr->getItem();  }
@@ -123,18 +122,32 @@ class BinarySearchTree {
      * Checks if 'this' iterator's internals have the same value
      *  as 'rhs'
      */
-    bool operator==(const iterator& rhs) const;
-    
-    /**
-     * Checks if 'this' iterator's internals have a different value
-     *  as 'rhs'
-     */
-    bool operator!=(const iterator& rhs) const;
+    bool operator==(const iterator& rhs) const{
+      return this->curr == rhs.curr;
+    }
+    bool operator!=(const iterator& rhs) const{
+      return this->curr != rhs.curr;
+    }
     
     /**
      * Advances the iterator's location using an in-order sequencing
      */
-    iterator& operator++();
+    iterator& operator++(){
+      if(curr -> getRight() == NULL){
+        while(curr -> getParent()->getRight() == curr) {
+          curr =  curr ->getParent();
+          if(curr-> getParent() == NULL) {
+            this->curr = NULL;
+            return *this;
+          }
+        }
+        curr = curr -> getParent();
+      } else{
+        curr = curr -> getRight();
+        while(curr -> getLeft() != NULL) curr = curr -> getLeft();
+      }
+    return *this;
+    }
     
   protected:
     Node<KeyType, ValueType>* curr;
@@ -145,19 +158,24 @@ class BinarySearchTree {
   /**
    * Returns an iterator to the "smallest" item in the tree
    */
-  iterator begin(); 
+  iterator begin(){
+    Node <KeyType, ValueType> * temp = root;
+    while(temp -> getLeft() != NULL) temp = temp -> getLeft();
+    iterator it(temp);
+    return it;
+  } 
 
   /**
    * Returns an iterator whose value means INVALID
    */
-  iterator end(); 
+  iterator end(){    
+    iterator it(NULL);
+    return it;
+  }
   
- protected:
-  /**
-   * Helper function to find a node with given key, k and 
-   * return a pointer to it or NULL if no item with that key
-   * exists
-   */
+  protected:
+  // Main data member of the class
+  Node<KeyType, ValueType> *root;
   Node<KeyType, ValueType>* internalFind(const KeyType& k) const 
   {
     Node<KeyType, ValueType> *curr = root;

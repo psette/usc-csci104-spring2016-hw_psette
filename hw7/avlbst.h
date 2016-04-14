@@ -97,10 +97,14 @@ private:
     AVLNode<KeyType, ValueType>* parent = node ->getParent();
     return parent != NULL && parent-> getLeft() == node ? parent -> getRight() != NULL : parent -> getLeft() != NULL;
   }
-  void SetBalanceAndHeights(AVLNode<KeyType, ValueType>* node ){
+  void SetBalanceAndHeights(AVLNode<KeyType, ValueType>* node, bool deleting = false ){
+    if(deleting)  {
+      std::cerr<<"DELETEING SET BALCANCE";
+      HeightHelper(node);
+      return;
+    }
     if(node -> getParent() == NULL ) return;
     if(!hasSibiling(node) ){
-    AVLNode<KeyType, ValueType>* temp = node;
       while(node -> getParent() != NULL){
         HeightHelper(node);
         node = node -> getParent();
@@ -112,20 +116,36 @@ private:
     else if(node -> getKey() == value) {
       AVLNode<KeyType, ValueType>* parent = node -> getParent();
       if(parent == NULL){
-        AVLNode<KeyType, ValueType>* switch_to = node -> getRight(), *temp = node -> getRight();
-        while( switch_to -> getLeft() != NULL) switch_to = switch_to -> getLeft();
+        std::cerr<<"ISROOT"<<std::endl;
+        if(node -> getLeft() == NULL && node-> getRight() == NULL) {
+          std::cerr<<"hasnochildren"<<std::endl;
+          delete node; 
+          this->root = NULL;
+        } else if(node->getLeft() == NULL|| node ->getRight() == NULL){
+          std::cerr<<"has1child"<<std::endl;
+          this -> root = node -> getRight() == NULL ? node -> getLeft() : node -> getRight();
+          this -> root -> setParent(NULL);
+          delete node;
+          SetBalanceAndHeights(static_cast<AVLNode<KeyType,ValueType>*>(this->root),true);
+        } else{
+          std::cerr<<"haschildren"<<std::endl;
+          AVLNode<KeyType, ValueType>* switch_to = node -> getLeft(), *temp = NULL;
+          while( switch_to -> getRight() != NULL) switch_to = switch_to -> getRight();
+          std::cerr<<switch_to->getKey();
+          temp = switch_to -> getParent();
+          temp -> getRight() == node ? temp -> setRight(NULL) : temp->setLeft(NULL);
           switch_to ->setParent(NULL);
           switch_to -> setLeft(node->getLeft());
           switch_to -> setRight(node->getRight());
-          switch_to -> getLeft() -> setParent(switch_to);
-          switch_to -> getRight() -> setParent(switch_to);
+          node -> getLeft() -> setParent(switch_to);
+          std::cerr<<"after opeatioins";
+          node -> getRight() -> setParent(switch_to);
           this->root = switch_to;
           delete node;
-          SetBalanceAndHeights(temp);
-      }
-      if ((node->getLeft() == NULL) && (node->getRight() == NULL)){
+          SetBalanceAndHeights(temp,true);
+        }
+      }else if ((node->getLeft() == NULL) && (node->getRight() == NULL)){
         parent -> getLeft() == node ? parent -> setLeft(NULL) : parent ->setRight(NULL);
-        node->getRight()->setParent(parent);
         delete node;
         SetBalanceAndHeights(node);
       } else if( node -> getRight() == NULL){
@@ -141,8 +161,9 @@ private:
           delete node;
           SetBalanceAndHeights(right);
       } else {
-        AVLNode<KeyType, ValueType>* switch_to = node -> getRight(), *temp;
-        while( switch_to -> getLeft() != NULL) switch_to = switch_to -> getLeft();
+        AVLNode<KeyType, ValueType>* switch_to = node -> getLeft(), *temp = NULL;
+        while(switch_to -> getRight() != NULL) switch_to = switch_to -> getRight();
+          temp = switch_to -> getParent();
           switch_to ->setParent(parent);
           switch_to -> setLeft(node->getLeft());
           switch_to -> setRight(node->getRight());

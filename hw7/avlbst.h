@@ -69,29 +69,30 @@ private:
   bool insertHelper(AVLNode<KeyType, ValueType>* node, const std::pair<const KeyType, ValueType>& new_item,AVLNode<KeyType, ValueType>* parent){
     if(node == NULL){
       node = new AVLNode<KeyType, ValueType>(new_item.first,new_item.second,parent);
-    }
-    else if(new_item.first > node->getKey()){
-     if(insertHelper(node->getRight(), new_item,node)){
+      if(parent == NULL){
+        this->root = node;
+      } else if( new_item.first > parent->getKey()) parent->setRight(node);
+      else parent->setLeft(node);
+    } else if(new_item.first < node->getKey()){
+     if(insertHelper(node->getLeft(), new_item,node)){
        AVLNode<KeyType, ValueType> *right = node -> getRight(), *left = node-> getLeft();
        int right_height = HeightHelper(right), left_height = HeightHelper(left);
        if(abs(left_height - right_height) > 1){
-        if(new_item.first > node -> getLeft() -> getKey())  LeftShift(node);
+        if(new_item.first > node -> getLeft() -> getKey())  RightShift(node);
         else {
-          RightShift(left);
-          LeftShift(node);
+            LeftShift(right); RightShift(node);
         }
         return true;
       } else return false;
      }
-    }else{
+    } else{
       if(insertHelper(node->getRight(), new_item,node)){
         AVLNode<KeyType, ValueType> *right = node -> getRight(), *left = node-> getLeft();
         int right_height = HeightHelper(right), left_height = HeightHelper(left);
         if(abs(left_height - right_height) > 1){
-          if(new_item.first < node -> getRight() -> getKey())  RightShift(node);
-          else {
-            LeftShift(right); RightShift(node);
-          }
+          if(new_item.first < node -> getRight() -> getKey())   LeftShift(node);
+          }else {
+            RightShift(left); LeftShift(node);
         }
         return true;
       } else return false;
@@ -117,13 +118,13 @@ private:
   If there are no children
   */
   void RightShift(AVLNode<KeyType, ValueType>*& node){
-      AVLNode<KeyType, ValueType>* left = node -> getLeft(), *parent = node ->getParent();
-      node -> setLeft(left -> getRight());
-      if(node->getLeft() != NULL) node -> getLeft() -> setParent(node);
-      left->setRight(node);
-      if(left->getRight() != NULL) node->getRight()->setParent(left);
-      node = left;
-      node->setParent(parent);
+    AVLNode<KeyType, ValueType>* left = node -> getLeft(), *parent = node ->getParent();
+    node -> setLeft(left -> getRight());
+    if(node->getLeft() != NULL) node -> getLeft() -> setParent(node);
+    left->setRight(node);
+    if(left->getRight() != NULL) node->getRight()->setParent(left);
+    node = left;
+    node->setParent(parent);
   }
   void LeftShift(AVLNode<KeyType, ValueType>*& node){
     AVLNode<KeyType, ValueType> *right = node->getRight(), *parent = node->getParent();
@@ -148,7 +149,7 @@ private:
           this -> root -> setParent(NULL);
           delete node;
           SetBalanceAndHeights(static_cast<AVLNode<KeyType,ValueType>*>(this->root),true);
-        } else{
+        } else {
           AVLNode<KeyType, ValueType>* switch_to = node -> getLeft(), *temp = NULL;
           while( switch_to -> getRight() != NULL) switch_to = switch_to -> getRight();
           temp = switch_to -> getParent();

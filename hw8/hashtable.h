@@ -1,6 +1,7 @@
 #include "Map.h"
 #include <cmath>
 #include <utility>
+#include <algorithm>
 class HashTable : public Map{
 	public:
 		HashTable(){
@@ -8,37 +9,42 @@ class HashTable : public Map{
 			_load_factor = 0;
 			vals = new std::pair<std::string,int>[11];
 			_size_index = 0;
-			_size = new int[13];
-			for(int i = 0; i < 11; i++) vals[i].second = 0;
+			for(int i = 0; i < 11; i++) {
+				vals[i].first = "";
+				vals[i].second = 0;
+			}
 			_size[0] = 11; _size[1] = 23; _size[2] = 41; _size[3] = 83; _size[4] = 163; _size[5] = 331; _size[6] = 641;
 			_size[8] = 2579; _size[9] = 5147; _size[10] = 10243; _size[11] = 20483; _size[12] =  40961; _size[7] = 1283;
 		}
 		~HashTable(){
-			delete [] _size;
 			delete [] vals;
 		}
 		void add(const std::string& word){
-			if(_load_factor > 0.5)	resize(++_size_index);
-			int hashed = hash(word);
+			std::string lower_word = word;
+			std::transform(lower_word.begin(), lower_word.end(), lower_word.begin(), ::tolower);
+			if(_load_factor >= 0.5)	resize(++_size_index);
+			int hashed = hash(lower_word);
 			if(vals[hashed].second == 0){
-				vals[hashed].first = word;
+				vals[hashed].first = lower_word;
 				vals[hashed].second = 1;
-			} 	else if( vals[hashed].first == word){
+				++_num_words;
+			} 	else if( vals[hashed].first == lower_word){
 				vals[hashed].second++;
 			}	else	{
-				for(int i = 1;; i++){
-					int index = (hashed + i * i)%_size[_size_index];
-					if(vals[index].first == word){
+				for(int i = 1; ;i++){
+					int index = (hashed + i * i) % _size[_size_index];
+					if(vals[index].first == lower_word){
 						vals[index].second++;
 						break;
 					} else if(vals[index].second == 0) {
-						vals[index].first = word;
+						_num_words++;
+						vals[index].first = lower_word;
 						vals[index].second = 1;
 						break;
 					}
 				}
 			}
-			_load_factor = ++_num_words/_size[_size_index];
+			_load_factor = double(_num_words)/_size[_size_index];
 		}
 		void reportAll(std::ostream& output){
 			if(_num_words == 0)	return;
@@ -47,17 +53,17 @@ class HashTable : public Map{
 		}
 		void resize(const int& ref){
 			std::pair<std::string,int> * old_vals = vals;
-			vals = new std::pair<std::string,int>[_size[_size_index]];
+			vals = new std::pair<std::string,int>[_size[ref]];
 			_num_words = 0;
 			_load_factor = 0;
 			for(int i = 0; i < _size[ref]; i++)	vals[i].second = 0;
-			for(int i = 0; i < _size[ref - 1]; i++){
+			for(int i = 0; i < _size[ref - 1]; i++)
 					for(int j = 0; j < old_vals[i].second; j++) add(old_vals[i].first);
-			}
 			delete [] old_vals;
 		}
+	private:
 		int hash(std::string word){
-			int * w = new int[14];
+			int w[14];
 			for(int i = 0; i < 14; ++i)	w[i] = -1;
 			if( word.length() > 8 ) {
 				int end = word.length();
@@ -74,10 +80,8 @@ class HashTable : public Map{
 			long long part2 = (long long)(16351 * w[3]) + (long long)(2623 * w[4]) + (long long)( 10174 * w[5]);
 			long long part3 = (long long)(22339 * w[6]) + (long long)(27779 * w[7]) + (long long)(36642 * w[8]) + (long long)(24019 * w[12]);
 			long long part4 = (long long)(19250 * w[9]) + (long long)(36216 * w[10]) + (long long)(33514 * w[11]) + (long long)(5552 * w[13]);
-			delete [] w;
-			return (part1 + part2 + part3 + part4) % 11;
+			return (part1 + part2 + part3 + part4) % _size[_size_index];
 		}
-	private:
 		void hash_helper(std::string word, int *arr){
 			while(word.length() < 8) word = '\0' + word;
 			long long a1 = word[0], a2 = word[1], a3 = word[2], a4 = word[3];
@@ -89,6 +93,7 @@ class HashTable : public Map{
 			long long total = part1 + part2 + part3 + part4;
 			int place = 0, i = 0;
 			while(arr[place] == -1){
+				if(place == 13)	break;
 				if(arr[place+1] != -1) break;
 				++place;
 			}
@@ -100,6 +105,5 @@ class HashTable : public Map{
 		std::pair<std::string,int> * vals;
 		int _size_index, _num_words;
 		double _load_factor;
-		int* _size; 
-
+		int _size[13]; 
 };

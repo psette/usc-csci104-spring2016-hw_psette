@@ -47,74 +47,55 @@ class SplayTree : public BinarySearchTree<KeyType, ValueType>, public Map{
 		if(head == NULL || p == NULL)	return;
 		Node<KeyType, ValueType>* g = p->getParent(), *left = x->getLeft(), *right = x->getRight(), *temp;
 		if (g == NULL && p != NULL){
-			this->root = x;
-			x->setParent(NULL);
+			this->root = x;	x->setParent(NULL);
 			if (p->getLeft() == x){
+				if (right != NULL)	right->setParent(p);
 				x->setRight(p);
 				p->setParent(x);
 				p->setLeft(right);
-				if (right != NULL)	right->setParent(p);
 			}	else {
+				if (left != NULL)	left->setParent(p);
 				x->setLeft(p);
 				p->setParent(x);
 				p->setRight(left);
-				if (left != NULL)	left->setParent(p);
 			}
 		}
-		bool isRoot = (g != NULL && g->getParent() == NULL);
+		bool root_node = (g != NULL && g->getParent() == NULL);
 		if (p != NULL && g != NULL && p->getLeft() == x && g->getLeft() == p){
-			if (isRoot)	this->root = x;
+			if (root_node)	this->root = x;
 			else	g->getParent()->getRight() == g ? g->getParent()->setRight(x): g->getParent()->setLeft(x);
-			x->setParent(g->getParent());
-			temp = p->getRight();
-			x->setRight(p);
-			p->setParent(x);
-			p->setLeft(right);
 	   	  	if (right != NULL)	right->setParent(p);
-			p->setRight(g);
-			g->setParent(p);
-			g->setLeft(temp);
+			temp = p->getRight();
 			if (temp != NULL)	temp->setParent(g);
+			x->setParent(g->getParent());	x->setRight(p);
+			p->setParent(x);	p->setLeft(right);p->setRight(g);
+			g->setParent(p);	g->setLeft(temp);
 		} else if (p != NULL && g != NULL && p->getRight() == x && g->getRight() == p){
-			if (isRoot)	this->root = x;
+			if (root_node)	this->root = x;
 			else g->getParent()->getRight() == g ? g->getParent()->setRight(x): g->getParent()->setLeft(x);
-			x->setParent(g->getParent());
 			temp = p->getLeft();
-			x->setLeft(p);
-			p->setParent(x);
-			p->setRight(left);
-			if (left != NULL)	left->setParent(p);
-			p->setLeft(g);
-			g->setParent(p);
-			g->setRight(temp);
-			if (temp != NULL)	temp->setParent(g);
+			if (left != NULL)	left->setParent(p);	if (temp != NULL)	temp->setParent(g);
+			x->setParent(g->getParent());	x->setLeft(p);
+			p->setParent(x);	p->setRight(left);	p->setLeft(g);
+			g->setParent(p);	g->setRight(temp);
    	  	}
-		right = x->getLeft();
-		temp = x->getRight();
+		right = x->getLeft();	temp = x->getRight();
 		if (p != NULL && g != NULL && p->getRight() == x && g->getLeft() == p){
-	   	  	if (isRoot)	this->root = x;
+	   	  	if (root_node)	this->root = x;
 			else	g->getParent()->getRight() == g ? g->getParent()->setRight(x): g->getParent()->setLeft(x);
-			x->setParent(g->getParent());
-			x->setRight(g);
-			g->setParent(x);
-			x->setLeft(p);
-			p->setParent(x);
-			p->setRight(right);
 			if (right != NULL)		right->setParent(p);
-	   	  	g->setLeft(temp);
 	   	  	if (temp != NULL)		temp->setParent(g);
+			x->setParent(g->getParent());	x->setRight(g);	x->setLeft(p);
+			g->setParent(x);	g->setLeft(temp);
+			p->setParent(x);	p->setRight(right);
 		}	else if (p != NULL && g != NULL && p->getLeft() == x && g->getRight() == p){
-			if (isRoot)	this->root = x;
+			if (root_node)	this->root = x;
 			else	g->getParent()->getRight() == g ? g->getParent()->setRight(x): g->getParent()->setLeft(x);
-			x->setParent(g->getParent());
-			x->setRight(p);
-			p->setParent(x);
-			x->setLeft(g);
-			g->setParent(x);
-	   	  	p->setLeft(temp);
 			if (temp != NULL)	temp->setParent(p);
-			g->setRight(right);
 			if (right != NULL)	right->setParent(g);
+			x->setParent(g->getParent());	x->setRight(p);	x->setLeft(g);
+			p->setParent(x);	p->setLeft(temp);
+			g->setParent(x);	g->setRight(right);
 		}
 		splay(x);
 	}

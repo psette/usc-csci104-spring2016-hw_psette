@@ -24,6 +24,7 @@ Why do you think that one was faster? Was it because of the chosen input or is t
 Hash table was faster because Splay has amortized O(log n) insert whereas hash has amortized O(1) insert. This is so because Splay needs to search for the value whereas hash just checks the index of the array.
 
 How do you think the running time would compare to the two if you were to implement your Map in the following fashions? Briefly justify each, although you do not need to quantify how much slower/faster with any specificity.
+
 Unsorted List Would be slower find O(n) but O(1) insertion
 
 Sorted list   Would be slower insert O(n) but O(log(n)) find

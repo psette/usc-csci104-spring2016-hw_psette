@@ -7,7 +7,6 @@ int main (int argc, char *argv[]){
 	char * tempa = argv[1];
 	std::ifstream input(tempa);
 	std::ifstream input2(tempa);
-	clock_t start;
 	int num = argv[2][0] -'0';
 	if(argc != 3 || (num != 4 && num != 5) ){
 		std::cerr<<"Check Input"<<std::endl;
@@ -16,7 +15,7 @@ int main (int argc, char *argv[]){
 	std::string temp;
 	HashTable hash;
 	SplayTree<std::string,int> splay;
-	start = clock();
+	clock_t start = clock();
 	while(input>>temp)	hash.add(temp);
 	double hashTime = (clock() - start ) / (double) CLOCKS_PER_SEC;
 	start = clock();

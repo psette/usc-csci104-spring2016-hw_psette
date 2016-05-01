@@ -64,7 +64,7 @@ class HashTable : public Map{
 					}
 				}
 			}
-			_load_factor =double(_num_words)/_size[_size_index];
+			_load_factor = double(_num_words)/_size[_size_index];
 		}
 		/*hash function: takes in a word and splits into groups of 8, calls hash helper to fill array w
 		then does some arithmetic and returns that value % tablesize
